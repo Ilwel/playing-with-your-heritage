@@ -12,7 +12,7 @@ const varContainer = {
 
 const varLabel = {
   init: {top: 10, left: 10, opacity: 0.5},
-  focus: { top: -25, left: 0, fontSize: "13px"}
+  focus: { top: -25, left: 0, opacity: 1, fontSize: "13px"}
 }
 
 export default function Input( props : InputInterface ){
