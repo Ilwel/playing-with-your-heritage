@@ -1,4 +1,6 @@
 import { Metadata } from "next"
+import PageWrapper from "../components/PageWrapper"
+import Content from "./components/Content"
 
 export const metadata: Metadata = {
   title: 'Sign In'
@@ -6,6 +8,8 @@ export const metadata: Metadata = {
 
 export default function SignIn (){
   return (
-    <div></div>
+    <PageWrapper>
+      <Content/>
+    </PageWrapper>
   )
 }

@@ -9,6 +9,6 @@ interface H1AnimInterface{
 export default function H1Anim({texts, redo = false}: H1AnimInterface){
 
   return redo
-    ? <h1 className="select-none"> <RedoAnimText texts={texts}/> </h1>
-    : <h1 className="select-none"> <SimpleTextAnim text={texts[0]}/> </h1>
+    ? <h1> <RedoAnimText texts={texts}/> </h1>
+    : <h1> <SimpleTextAnim text={texts[0]}/> </h1>
 }
