@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={jetBrains.className + " h-svh"}>{children}</body>
+      <body className={jetBrains.className + " h-svh overflow-hidden"}>{children}</body>
     </html>
   )
 }
