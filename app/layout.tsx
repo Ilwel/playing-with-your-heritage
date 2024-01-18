@@ -5,9 +5,12 @@ import './globals.css'
 const jetBrains = JetBrains_Mono({weight: "400", subsets:["latin-ext"]})
 
 export const metadata: Metadata = {
-  title: 'Playing With Your Inheritance',
-  description: 'play with your heritage together with your friends',
-}
+  title:{
+    template: 'PWYI - %s',
+    default: 'PWYI'
+  },
+  description: 'play with your inheritance together with your friends',
+} 
 export default function RootLayout({
   children,
 }: {
