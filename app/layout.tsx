@@ -1,14 +1,15 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
+import { JetBrains_Mono } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'] })
+import './globals.css'
+import { AnimatePresence } from 'framer-motion';
+
+const jetBrains = JetBrains_Mono({weight: "400", subsets:["latin-ext"]})
 
 export const metadata: Metadata = {
   title: 'Playing With Your Inheritance',
   description: 'play with your heritage together with your friends',
 }
-
 export default function RootLayout({
   children,
 }: {
@@ -16,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={jetBrains.className + " h-svh"}>{children}</body>
     </html>
   )
 }
