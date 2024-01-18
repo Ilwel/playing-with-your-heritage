@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <main className="home">
       <H1Anim texts={['Playing With Your Inheritance']} />
-      <Button delay={2}>Start</Button>
+      <Button href="/sign-in" delay={2}>Start</Button>
     </main>
   )
 }
