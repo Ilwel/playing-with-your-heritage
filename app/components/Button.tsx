@@ -1,29 +1,32 @@
-"use client"
-import { AnimatePresence, motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+'use client'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 
-interface ButtonInterface{
+interface ButtonInterface {
   children: React.ReactNode
-  delay?: number 
+  delay?: number
   href?: string
 }
 
-export default function Button({ children, delay=0.25, href }: ButtonInterface){
-
-  const { push } = useRouter()
+export default function Button({
+  children,
+  delay = 0.25,
+  href,
+}: ButtonInterface) {
+  const router = useRouter()
 
   const handleHref = () => {
-    if(href) push(href)
+    if (href != null) router.push(href)
   }
 
-  return(
+  return (
     <AnimatePresence>
       <motion.button
-        onClick={href ? handleHref : () => {}}
-        initial={{opacity: 0, y: 15}}
-        animate={{opacity: 1, y: 0}}
-        exit={{opacity: 0}}
-        transition={{delay, duration: .2}}
+        onClick={href != null ? handleHref : () => {}}
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0 }}
+        transition={{ delay, duration: 0.2 }}
       >
         {children}
       </motion.button>

@@ -1,15 +1,15 @@
-import { Metadata } from "next"
-import PageWrapper from "../components/PageWrapper"
-import Content from "./components/Content"
+import { type Metadata } from 'next'
+import PageWrapper from '../components/PageWrapper'
+import Content from './components/Content'
 
 export const metadata: Metadata = {
-  title: 'Sign In'
+  title: 'Sign In',
 }
 
-export default function SignIn (){
+export default function SignIn() {
   return (
     <PageWrapper>
-      <Content/>
+      <Content />
     </PageWrapper>
   )
 }
