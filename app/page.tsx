@@ -1,6 +1,5 @@
 import Button from "./components/Button";
 import H1Anim from "./components/H1Anim";
-import PageWrapper from "./components/PageWrapper";
 
 export default function Home() {
   return (

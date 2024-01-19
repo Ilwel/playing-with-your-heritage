@@ -1,4 +1,4 @@
-import { motion, spring } from "framer-motion";
+import { motion } from "framer-motion";
 import { InputHTMLAttributes, useRef, useState } from "react";
 import { useOutside } from "../hooks/useOutside";
 
