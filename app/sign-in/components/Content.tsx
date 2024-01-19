@@ -8,11 +8,11 @@ import { SignInValidation } from '@/app/validations/SignInValidation'
 import { useMutation } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { type FormEvent, useRef, useState } from 'react'
+import { type FormEvent, useRef, useState, useEffect } from 'react'
 
 export default function Content() {
   const router = useRouter()
-  const [signIn] = useMutation(SIGN_IN)
+  const [signIn, { data }] = useMutation(SIGN_IN)
   const formRef = useRef<HTMLFormElement>(null)
   const [errorTrigger, setErrorTrigger] = useTrigger()
   const [errors, setErrors] = useState<string[]>([])
@@ -35,7 +35,6 @@ export default function Content() {
             password: formData.get('password'),
           },
         })
-        router.push('/')
       } catch (error) {
         if (error instanceof Error) {
           console.log(error.message)
@@ -45,6 +44,17 @@ export default function Content() {
       }
     }
   }
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (data) {
+      const {
+        signIn: { token },
+      } = data
+      localStorage.setItem('token', token as string)
+      router.push('/home')
+    }
+  }, [data, router])
 
   return (
     <div className="sign-in flex flex-col gap-4">
