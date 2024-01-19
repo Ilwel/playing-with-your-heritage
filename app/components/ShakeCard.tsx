@@ -24,7 +24,7 @@ export default function ShakeCard({ children, trigger }: ShakeCardInterface) {
         duration: 0.1,
       }}
       variants={variants}
-      className="card flex flex-col gap-6"
+      className={`card flex flex-col gap-6 ${trigger ? 'border-red-500 text-red-500' : ''}`}
     >
       {children}
     </motion.div>
