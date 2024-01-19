@@ -26,12 +26,20 @@ export default function Content() {
         setErrorTrigger(true)
         return
       }
-      await signUp({
-        variables: {
-          username: formData.get('username'),
-          password: formData.get('password'),
-        },
-      })
+      try {
+        await signUp({
+          variables: {
+            username: formData.get('username'),
+            password: formData.get('password'),
+          },
+        })
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error.message)
+          setErrors(['server:' + error.message])
+          setErrorTrigger(true)
+        }
+      }
     }
   }
 
@@ -57,10 +65,8 @@ export default function Content() {
             Sign Up
           </Button>
         </form>
-        <p className="m-auto text-red-500">
-          {validation.convertToMessage(errors[0])}
-        </p>
       </ShakeCard>
+      <p className="text-red-500">{validation.convertToMessage(errors[0])}</p>
       <Link href="/sign-in"> I Already Have An Account</Link>
     </div>
   )

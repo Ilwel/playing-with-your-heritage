@@ -26,6 +26,8 @@ export class SignInValidation {
   convertToMessage(error: string = '') {
     if (error.includes('input:')) {
       return `${this.captlize(error.split(':')[1])} Is Required`
+    } else if (error.includes('server:')) {
+      return `Server: ${this.captlize(error.split(':')[1])}`
     } else {
       return ''
     }
