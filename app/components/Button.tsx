@@ -1,8 +1,9 @@
 'use client'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
+import { type ButtonHTMLAttributes } from 'react'
 
-interface ButtonInterface {
+interface ButtonInterface extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode
   delay?: number
   href?: string

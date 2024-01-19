@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Sign Up',
 }
 
-export default function SignOut() {
+export default function SignUp() {
   return (
     <PageWrapper>
       <Content />
