@@ -7,9 +7,11 @@ import { useTrigger } from '@/app/hooks/useTrigger'
 import { SignInValidation } from '@/app/validations/SignInValidation'
 import { useMutation } from '@apollo/client'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { type FormEvent, useRef, useState } from 'react'
 
 export default function Content() {
+  const router = useRouter()
   const [signIn] = useMutation(SIGN_IN)
   const formRef = useRef<HTMLFormElement>(null)
   const [errorTrigger, setErrorTrigger] = useTrigger()
@@ -33,6 +35,7 @@ export default function Content() {
             password: formData.get('password'),
           },
         })
+        router.push('/')
       } catch (error) {
         if (error instanceof Error) {
           console.log(error.message)
