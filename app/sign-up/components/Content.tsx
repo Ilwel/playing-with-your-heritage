@@ -1,6 +1,7 @@
 'use client'
 import Button from '@/app/components/Button'
 import Input from '@/app/components/Input'
+import Loading from '@/app/components/Loading'
 import ShakeCard from '@/app/components/ShakeCard'
 import { SIGN_UP } from '@/app/graphql/mutations/UserMutations'
 import { useTrigger } from '@/app/hooks/useTrigger'
@@ -17,6 +18,7 @@ export default function Content() {
   const [errorTrigger, setErrorTrigger] = useTrigger()
   const [errors, setErrors] = useState<string[]>([])
   const validation = new SignUpValidation()
+  const [loading, setLoading] = useState(false)
 
   const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -29,18 +31,21 @@ export default function Content() {
         return
       }
       try {
+        setLoading(true)
         await signUp({
           variables: {
             username: formData.get('username'),
             password: formData.get('password'),
           },
         })
+        setLoading(false)
         router.push('/sign-in')
       } catch (error) {
         if (error instanceof Error) {
           console.log(error.message)
           setErrors(['server:' + error.message])
           setErrorTrigger(true)
+          setLoading(false)
         }
       }
     }
@@ -48,6 +53,7 @@ export default function Content() {
 
   return (
     <div className="sign-in flex flex-col gap-4">
+      <Loading open={loading} />
       <ShakeCard trigger={errorTrigger}>
         <h1>Sign Up</h1>
         <form
