@@ -25,8 +25,14 @@ export default function Page() {
           <XOctagon />
           Sign Out
         </Button>
-        <header className="flex flex-col items-start justify-start w-full gap-2">
+        <header className="flex items-start justify-start w-full gap-2">
           <SearchFriends />
+          <Button href="/friend-requests/sent" delay={0.7} className="mt-4">
+            Requests Sent
+          </Button>
+          <Button href="/friend-requests/received" delay={1} className="mt-4">
+            Requests Received
+          </Button>
         </header>
         <main className="flex items-start w-full">
           <aside>

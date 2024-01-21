@@ -26,7 +26,7 @@ export default function SearchFriends() {
             }
           }}
           className="w-96"
-          label="Search For A User In The World"
+          label="Request A Friendship From An User"
         />
         {usersList?.users
           .filter((item) => item.username !== username)
