@@ -1,25 +1,23 @@
-'use client'
-import { JetBrains_Mono } from 'next/font/google'
+import { type Metadata } from 'next'
 import './globals.css'
-import { ApolloProvider } from '@apollo/client'
-import { useApi } from './hooks/useApi'
+import RootLayoutContent from './components/RootLayoutContent'
 
-const jetBrains = JetBrains_Mono({ weight: '400', subsets: ['latin-ext'] })
+export const metadata: Metadata = {
+  title: {
+    template: 'PWYH - %s',
+    default: 'PWYH',
+  },
+  description: 'play with your inheritance together with your friends',
+}
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const api = useApi()
-
   return (
     <html lang="en">
-      <ApolloProvider client={api.getClient()}>
-        <body className={jetBrains.className + ' h-svh overflow-hidden'}>
-          {children}
-        </body>
-      </ApolloProvider>
+      <RootLayoutContent>{children}</RootLayoutContent>
     </html>
   )
 }
