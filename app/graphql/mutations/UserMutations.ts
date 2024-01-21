@@ -16,9 +16,18 @@ const SIGN_IN = gql`
       token
       user {
         id
+        username
       }
     }
   }
 `
 
-export { SIGN_UP, SIGN_IN }
+const CREATE_FRIENDSHIP = gql`
+  mutation CreateOneFriendship($data: FriendshipCreateInput!) {
+    createOneFriendship(data: $data) {
+      id
+    }
+  }
+`
+
+export { SIGN_UP, SIGN_IN, CREATE_FRIENDSHIP }

@@ -54,9 +54,14 @@ export default function Content() {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (data) {
       const {
-        signIn: { token },
+        signIn: {
+          token,
+          user: { id, username },
+        },
       } = data
       localStorage.setItem('token', token as string)
+      localStorage.setItem('userId', id as string)
+      localStorage.setItem('username', username as string)
       router.push('/home')
     }
   }, [data, router])
