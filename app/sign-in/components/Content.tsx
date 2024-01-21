@@ -1,15 +1,17 @@
 'use client'
 import Button from '@/app/components/Button'
 import Input from '@/app/components/Input'
-import Loading from '@/app/components/Loading'
 import ShakeCard from '@/app/components/ShakeCard'
 import { SIGN_IN } from '@/app/graphql/mutations/UserMutations'
 import { useTrigger } from '@/app/hooks/useTrigger'
+import { setLoading } from '@/app/redux/features/laodingSlice'
+import { type AppDispatch } from '@/app/redux/store'
 import { SignInValidation } from '@/app/validations/SignInValidation'
 import { useMutation } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { type FormEvent, useRef, useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 export default function Content() {
   const router = useRouter()
@@ -18,7 +20,7 @@ export default function Content() {
   const [errorTrigger, setErrorTrigger] = useTrigger()
   const [errors, setErrors] = useState<string[]>([])
   const validation = new SignInValidation()
-  const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch<AppDispatch>()
 
   const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -31,20 +33,20 @@ export default function Content() {
         return
       }
       try {
-        setLoading(true)
+        dispatch(setLoading({ open: true }))
         await signIn({
           variables: {
             username: formData.get('username'),
             password: formData.get('password'),
           },
         })
-        setLoading(false)
+        dispatch(setLoading({ open: false }))
       } catch (error) {
         if (error instanceof Error) {
           console.log(error.message)
           setErrors(['server:' + error.message])
           setErrorTrigger(true)
-          setLoading(false)
+          dispatch(setLoading({ open: false }))
         }
       }
     }
@@ -68,7 +70,6 @@ export default function Content() {
 
   return (
     <div className="sign-in flex flex-col gap-4">
-      <Loading open={loading} />
       <ShakeCard trigger={errorTrigger}>
         <h1>Sign In</h1>
         <form

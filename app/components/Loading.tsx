@@ -1,11 +1,9 @@
 'use client'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useAppSelector } from '../redux/store'
 
-interface LoadingInterface {
-  open: boolean
-}
-
-export default function Loading({ open }: LoadingInterface) {
+export default function Loading() {
+  const open = useAppSelector((state) => state.loadingReducer.value.open)
   return open ? (
     <div className="flex items-center justify-center absolute w-full h-full  backdrop-blur-sm z-10">
       <div className="grid grid-cols-3 grid-rows-3">

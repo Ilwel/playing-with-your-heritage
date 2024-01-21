@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { MY_FIRENDS } from '../graphql/queries/UserQueries'
+import { useSession } from './useSession'
 
 export interface UsersFecth {
   id: string
@@ -12,7 +13,7 @@ interface FriendshipFetch {
 }
 
 export function useFriendsList() {
-  const id = localStorage.getItem('userId')
+  const { id } = useSession()
   const { data } = useQuery<{ friendships: FriendshipFetch[] }>(MY_FIRENDS, {
     variables: {
       where: {

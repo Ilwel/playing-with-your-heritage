@@ -1,23 +1,21 @@
 'use client'
 import Input from '@/app/components/Input'
-import Loading from '@/app/components/Loading'
 import { useCreateFriendship } from '@/app/hooks/useCreateFriendship'
 import { useFriendsList } from '@/app/hooks/useFriendsList'
+import { useSession } from '@/app/hooks/useSession'
 import { useUsersList } from '@/app/hooks/useUsersList'
 import { PlusCircle } from 'lucide-react'
 import { useState } from 'react'
 
 export default function SearchFriends() {
-  const username = localStorage.getItem('username')
+  const { username } = useSession()
   const [search, setSearch] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
-  const { friendships } = useFriendsList()
+  const { following } = useFriendsList()
   const [usersList] = useUsersList(search)
-  const [handleCreateFriendship] = useCreateFriendship(setLoading)
+  const [handleCreateFriendship] = useCreateFriendship()
 
   return (
     <>
-      <Loading open={loading} />
       <div className="flex flex-col items-end gap-2 h-[220px]">
         <Input
           onChange={(e) => {
@@ -34,7 +32,7 @@ export default function SearchFriends() {
           .filter((item) => item.username !== username)
           .filter((item) => {
             return (
-              friendships
+              following
                 .map((item) => item.whosFollowedBy.id)
                 .find((id) => id === item.id) == null
             )

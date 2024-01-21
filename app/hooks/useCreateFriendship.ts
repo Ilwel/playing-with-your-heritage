@@ -1,16 +1,18 @@
 import { useMutation } from '@apollo/client'
 import { CREATE_FRIENDSHIP } from '../graphql/mutations/UserMutations'
 import { useRouter } from 'next/navigation'
-import { type Dispatch, type SetStateAction } from 'react'
+import { useSession } from './useSession'
+import { useDispatch } from 'react-redux'
+import { type AppDispatch } from '../redux/store'
+import { setLoading } from '../redux/features/laodingSlice'
 
-export function useCreateFriendship(
-  setLoading: Dispatch<SetStateAction<boolean>>
-) {
-  const id = localStorage.getItem('userId')
+export function useCreateFriendship() {
+  const { id } = useSession()
   const router = useRouter()
   const [createFriendship] = useMutation(CREATE_FRIENDSHIP)
+  const dispatch = useDispatch<AppDispatch>()
   const handle = async (friendId: string) => {
-    setLoading(true)
+    dispatch(setLoading({ open: true }))
     await createFriendship({
       variables: {
         data: {
@@ -27,7 +29,7 @@ export function useCreateFriendship(
         },
       },
     })
-    setLoading(false)
+    dispatch(setLoading({ open: false }))
     router.refresh()
   }
   return [handle]
