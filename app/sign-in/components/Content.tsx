@@ -3,6 +3,7 @@ import Button from '@/app/components/Button'
 import Input from '@/app/components/Input'
 import ShakeCard from '@/app/components/ShakeCard'
 import { SIGN_IN } from '@/app/graphql/mutations/UserMutations'
+import { useSession } from '@/app/hooks/useSession'
 import { useTrigger } from '@/app/hooks/useTrigger'
 import { setLoading } from '@/app/redux/features/laodingSlice'
 import { type AppDispatch } from '@/app/redux/store'
@@ -21,8 +22,9 @@ export default function Content() {
   const [errors, setErrors] = useState<string[]>([])
   const validation = new SignInValidation()
   const dispatch = useDispatch<AppDispatch>()
+  useSession()
 
-  const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSignIn = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (formRef.current !== null) {
       const formData = new FormData(formRef.current)
@@ -75,7 +77,7 @@ export default function Content() {
         <form
           ref={formRef}
           onSubmit={async (e) => {
-            await handleSignUp(e)
+            await handleSignIn(e)
           }}
           className="flex flex-col gap-4"
         >

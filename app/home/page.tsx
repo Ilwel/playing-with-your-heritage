@@ -5,13 +5,16 @@ import PageWrapper from '../components/PageWrapper'
 import SearchFriends from './components/SearchFriends'
 import { useRouter } from 'next/navigation'
 import MyFriends from './components/MyFriends'
+import { useSession } from '../hooks/useSession'
 
 export default function Page() {
   const router = useRouter()
+  useSession()
 
   const handleSignOut = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('userId')
+    localStorage.removeItem('username')
     router.push('/')
   }
 

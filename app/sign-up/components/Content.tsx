@@ -3,6 +3,7 @@ import Button from '@/app/components/Button'
 import Input from '@/app/components/Input'
 import ShakeCard from '@/app/components/ShakeCard'
 import { SIGN_UP } from '@/app/graphql/mutations/UserMutations'
+import { useSession } from '@/app/hooks/useSession'
 import { useTrigger } from '@/app/hooks/useTrigger'
 import { setLoading } from '@/app/redux/features/laodingSlice'
 import { type AppDispatch } from '@/app/redux/store'
@@ -21,6 +22,7 @@ export default function Content() {
   const [errors, setErrors] = useState<string[]>([])
   const validation = new SignUpValidation()
   const dispatch = useDispatch<AppDispatch>()
+  useSession()
 
   const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
