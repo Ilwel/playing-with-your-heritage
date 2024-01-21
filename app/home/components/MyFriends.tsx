@@ -1,23 +1,26 @@
+import DownAnim from '@/app/components/DownAnim'
+import RightAnim from '@/app/components/RightAnim'
 import { useFriendsList } from '@/app/hooks/useFriendsList'
-import { motion } from 'framer-motion'
+import { XOctagon } from 'lucide-react'
 
 export default function MyFriends() {
   const { friendships } = useFriendsList()
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.5 }}
-    >
+    <DownAnim>
       <h1>Friends</h1>
       <div className="flex flex-col gap-2 mt-4">
-        {friendships.map((item) => (
-          <div className="border border-black p-2" key={item.whosFollowedBy.id}>
+        {friendships.map((item, index) => (
+          <RightAnim
+            className="flex justify-between w-52 border border-black p-2"
+            key={item.whosFollowedBy.id}
+            delay={0.5 + index / 2}
+          >
             {item.whosFollowedBy.username}
-          </div>
+            <XOctagon className="cursor-pointer" />
+          </RightAnim>
         ))}
       </div>
-    </motion.div>
+    </DownAnim>
   )
 }

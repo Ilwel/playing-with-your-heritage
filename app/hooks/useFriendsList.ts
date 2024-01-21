@@ -32,12 +32,10 @@ export function useFriendsList() {
     },
   })
 
-  const following = data?.friendships.filter(
-    (item) => item.whosFollowing.id === id
-  )
-  const followedBy = data?.friendships.filter(
-    (item) => item.whosFollowedBy.id === id
-  )
+  const following =
+    data?.friendships.filter((item) => item.whosFollowing.id === id) ?? []
+  const followedBy =
+    data?.friendships.filter((item) => item.whosFollowedBy.id === id) ?? []
   const friendships =
     following?.filter((item) =>
       followedBy
