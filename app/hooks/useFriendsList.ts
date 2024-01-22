@@ -44,5 +44,21 @@ export function useFriendsList() {
         .includes(item.whosFollowedBy.id)
     ) ?? []
 
-  return { friendships, following, followedBy }
+  const sent =
+    following.filter(
+      (item) =>
+        !friendships
+          .map((item) => item.whosFollowedBy.id)
+          .includes(item.whosFollowedBy.id)
+    ) ?? []
+
+  const received =
+    followedBy.filter(
+      (item) =>
+        !friendships
+          .map((item) => item.whosFollowedBy.id)
+          .includes(item.whosFollowing.id)
+    ) ?? []
+
+  return { friendships, following, followedBy, sent, received }
 }
