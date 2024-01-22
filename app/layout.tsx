@@ -4,8 +4,8 @@ import RootLayoutContent from './components/RootLayoutContent'
 
 export const metadata: Metadata = {
   title: {
-    template: 'PWYH - %s',
-    default: 'PWYH',
+    template: 'PWYI - %s',
+    default: 'PWYI',
   },
   description: 'play with your inheritance together with your friends',
 }
