@@ -15,12 +15,12 @@ export default function Received() {
 
   return (
     <PageWrapper>
-      <div className="w-full h-full flex flex-col gap-5 items-center justify-center">
+      <div className="w-full h-full flex flex-col gap-5 items-center justify-start p-10">
         <h2>Friendship Requests Received</h2>
-        <div className="card flex items-center flex-col gap-2 w-[300px]">
+        <div className="grid grid-cols-3 items-center gap-2">
           {received.map((item, index) => (
             <RightAnim
-              className="border border-black p-2 flex justify-between w-[200px]"
+              className="border border-black p-2 flex justify-between w-[250px]"
               key={item.whosFollowing.id}
               delay={0.5 + index / 2}
             >
