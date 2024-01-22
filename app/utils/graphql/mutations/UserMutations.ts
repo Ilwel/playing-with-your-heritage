@@ -38,4 +38,18 @@ const DELETE_FRIENDSHIP = gql`
   }
 `
 
-export { SIGN_UP, SIGN_IN, CREATE_FRIENDSHIP, DELETE_FRIENDSHIP }
+const CREATE_MY_GAME = gql`
+  mutation CreateMyGame {
+    createMyGame {
+      id
+    }
+  }
+`
+
+export {
+  SIGN_UP,
+  SIGN_IN,
+  CREATE_FRIENDSHIP,
+  DELETE_FRIENDSHIP,
+  CREATE_MY_GAME,
+}
