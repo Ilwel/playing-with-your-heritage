@@ -20,6 +20,7 @@ export function useSession() {
       '/home',
       '/friend-requests/sent',
       '/friend-requests/received',
+      '/friends',
     ]
 
     const signPaths = ['/sign-in', '/sign-up']
