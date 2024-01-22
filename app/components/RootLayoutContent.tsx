@@ -1,10 +1,10 @@
 'use client'
 import { ApolloProvider } from '@apollo/client'
-import { useApi } from '../hooks/useApi'
 import React from 'react'
 import { JetBrains_Mono } from 'next/font/google'
-import { ReduxProvider } from '../redux/provider'
 import Loading from './Loading'
+import { useApi } from '../utils/hooks/useApi'
+import { ReduxProvider } from '../utils/redux/provider'
 
 const jetBrains = JetBrains_Mono({ weight: '400', subsets: ['latin-ext'] })
 

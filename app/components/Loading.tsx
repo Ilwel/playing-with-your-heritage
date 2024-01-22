@@ -1,6 +1,6 @@
 'use client'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useAppSelector } from '../redux/store'
+import { useAppSelector } from '../utils/redux/store'
 
 export default function Loading() {
   const open = useAppSelector((state) => state.loadingReducer.value.open)

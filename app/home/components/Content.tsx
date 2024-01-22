@@ -4,8 +4,8 @@ import PageWrapper from '@/app/components/PageWrapper'
 import { XOctagon } from 'lucide-react'
 import SearchFriends from './SearchFriends'
 import MyFriends from './MyFriends'
-import { useSession } from '@/app/hooks/useSession'
 import { useRouter } from 'next/navigation'
+import { useSession } from '@/app/utils/hooks/useSession'
 
 export default function Content() {
   const router = useRouter()

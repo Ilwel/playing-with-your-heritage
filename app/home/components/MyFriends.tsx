@@ -1,7 +1,7 @@
 import DownAnim from '@/app/components/DownAnim'
 import RightAnim from '@/app/components/RightAnim'
-import { useDeleteFriendship } from '@/app/hooks/useDeleteFriendship'
-import { useFriendsList } from '@/app/hooks/useFriendsList'
+import { useDeleteFriendship } from '@/app/utils/hooks/useDeleteFriendship'
+import { useFriendsList } from '@/app/utils/hooks/useFriendsList'
 import { XOctagon } from 'lucide-react'
 
 export default function MyFriends() {

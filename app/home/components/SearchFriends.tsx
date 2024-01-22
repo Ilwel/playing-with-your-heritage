@@ -1,9 +1,9 @@
 'use client'
 import Input from '@/app/components/Input'
-import { useCreateFriendship } from '@/app/hooks/useCreateFriendship'
-import { useFriendsList } from '@/app/hooks/useFriendsList'
-import { useSession } from '@/app/hooks/useSession'
-import { useUsersList } from '@/app/hooks/useUsersList'
+import { useCreateFriendship } from '@/app/utils/hooks/useCreateFriendship'
+import { useFriendsList } from '@/app/utils/hooks/useFriendsList'
+import { useSession } from '@/app/utils/hooks/useSession'
+import { useUsersList } from '@/app/utils/hooks/useUsersList'
 import { PlusCircle } from 'lucide-react'
 import { useState } from 'react'
 

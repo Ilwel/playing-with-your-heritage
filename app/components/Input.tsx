@@ -1,7 +1,7 @@
 'use client'
 import { motion } from 'framer-motion'
 import { type InputHTMLAttributes, useRef, useState } from 'react'
-import { useOutside } from '../hooks/useOutside'
+import { useOutside } from '../utils/hooks/useOutside'
 
 interface InputInterface extends InputHTMLAttributes<HTMLInputElement> {
   label: string

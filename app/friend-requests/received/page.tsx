@@ -1,18 +1,18 @@
 'use client'
 import PageWrapper from '@/app/components/PageWrapper'
 import RightAnim from '@/app/components/RightAnim'
-import { useCreateFriendship } from '@/app/hooks/useCreateFriendship'
-import { useDeleteFriendship } from '@/app/hooks/useDeleteFriendship'
-import { useFriendsList } from '@/app/hooks/useFriendsList'
-import { useSession } from '@/app/hooks/useSession'
+import { useCreateFriendship } from '@/app/utils/hooks/useCreateFriendship'
+import { useDeleteFriendship } from '@/app/utils/hooks/useDeleteFriendship'
+import { useFriendsList } from '@/app/utils/hooks/useFriendsList'
+import { useSession } from '@/app/utils/hooks/useSession'
 import { PlusSquare, XOctagon } from 'lucide-react'
 
 export default function Received() {
   const { received } = useFriendsList()
   const [handleCreateFriendship] = useCreateFriendship()
   const [handleDeleteFriendship] = useDeleteFriendship()
-
   useSession()
+
   return (
     <PageWrapper>
       <div className="w-full h-full flex flex-col gap-5 items-center justify-center">
