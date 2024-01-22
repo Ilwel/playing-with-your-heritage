@@ -2,32 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base{
-  body{
-    @apply bg-white text-black select-none
+@layer base {
+  body {
+    @apply bg-white text-black select-none;
   }
-  h1{
-    @apply text-2xl
+  h1 {
+    @apply text-2xl;
   }
-  h2{
-    @apply text-xl
+  h2 {
+    @apply text-xl;
   }
-  button{
-    @apply p-2 border border-black hover:bg-black hover:text-white duration-200
+  button {
+    @apply p-2 border border-black hover:bg-black hover:text-white duration-200;
   }
-  input{
-    @apply border border-black p-2
+  input {
+    @apply border border-black p-2;
   }
 }
 
-@layer components{
-  .home{
-    @apply flex flex-col gap-5 w-full h-full items-center justify-center
+@layer components {
+  .home {
+    @apply flex flex-col gap-5 w-full h-full items-center justify-center;
   }
-  .sign-in{
-    @apply flex flex-col w-full h-full items-center justify-center
+  .sign-in {
+    @apply flex flex-col w-full h-full items-center justify-center;
   }
-  .card{
-    @apply border border-black p-10
+  .card {
+    @apply border border-black p-10;
+  }
+  .button {
+    @apply p-2 border border-black hover:bg-black hover:text-white duration-200;
   }
 }
