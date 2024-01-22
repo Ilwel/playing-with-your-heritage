@@ -6,7 +6,7 @@ import { PlusSquare, XOctagon } from 'lucide-react'
 
 export default function Received() {
   const { received } = useFriendsList()
-  console.log('component: ', receiveds)
+
   useSession()
   return (
     <PageWrapper>
