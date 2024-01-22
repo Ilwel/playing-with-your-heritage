@@ -9,6 +9,7 @@ export default function Loading() {
       <div className="grid grid-cols-3 grid-rows-3">
         <AnimatePresence>
           <motion.div
+            key={1}
             animate={{
               opacity: [0, 1],
             }}
@@ -20,6 +21,7 @@ export default function Loading() {
             className="h-10 w-10 bg-black"
           />
           <motion.div
+            key={2}
             animate={{
               opacity: [0, 1],
             }}
@@ -31,6 +33,7 @@ export default function Loading() {
             className="h-10 w-10 bg-black"
           />
           <motion.div
+            key={3}
             animate={{
               opacity: [0, 1],
             }}
@@ -42,6 +45,7 @@ export default function Loading() {
             className="h-10 w-10 bg-black"
           />
           <motion.div
+            key={4}
             animate={{
               opacity: [0, 1],
             }}
@@ -53,6 +57,7 @@ export default function Loading() {
             className="h-10 w-10 bg-black"
           />
           <motion.div
+            key={5}
             animate={{
               opacity: [0, 1],
             }}
@@ -64,6 +69,7 @@ export default function Loading() {
             className="h-10 w-10 bg-black"
           />
           <motion.div
+            key={6}
             animate={{
               opacity: [0, 1],
             }}
@@ -75,6 +81,7 @@ export default function Loading() {
             className="h-10 w-10 bg-black"
           />
           <motion.div
+            key={7}
             animate={{
               opacity: [0, 1],
             }}
@@ -86,6 +93,7 @@ export default function Loading() {
             className="h-10 w-10 bg-black"
           />
           <motion.div
+            key={8}
             animate={{
               opacity: [0, 1],
             }}
@@ -97,6 +105,7 @@ export default function Loading() {
             className="h-10 w-10 bg-black"
           />
           <motion.div
+            key={9}
             animate={{
               opacity: [0, 1],
             }}
