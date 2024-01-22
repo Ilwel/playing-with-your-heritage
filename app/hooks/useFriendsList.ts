@@ -8,6 +8,7 @@ export interface UsersFecth {
 }
 
 interface FriendshipFetch {
+  id: string
   whosFollowedBy: UsersFecth
   whosFollowing: UsersFecth
 }

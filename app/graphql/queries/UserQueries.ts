@@ -12,6 +12,7 @@ const LIST_USERS = gql`
 const MY_FIRENDS = gql`
   query MyFriends($where: FriendshipWhereInput) {
     friendships(where: $where) {
+      id
       whosFollowedBy {
         id
         username

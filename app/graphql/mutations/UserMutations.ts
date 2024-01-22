@@ -30,4 +30,12 @@ const CREATE_FRIENDSHIP = gql`
   }
 `
 
-export { SIGN_UP, SIGN_IN, CREATE_FRIENDSHIP }
+const DELETE_FRIENDSHIP = gql`
+  mutation DeleteOneFriendship($where: FriendshipWhereUniqueInput!) {
+    deleteOneFriendship(where: $where) {
+      id
+    }
+  }
+`
+
+export { SIGN_UP, SIGN_IN, CREATE_FRIENDSHIP, DELETE_FRIENDSHIP }

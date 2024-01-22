@@ -1,10 +1,12 @@
 import DownAnim from '@/app/components/DownAnim'
 import RightAnim from '@/app/components/RightAnim'
+import { useDeleteFriendship } from '@/app/hooks/useDeleteFriendship'
 import { useFriendsList } from '@/app/hooks/useFriendsList'
 import { XOctagon } from 'lucide-react'
 
 export default function MyFriends() {
   const { friendships } = useFriendsList()
+  const [handleDeleteFriendship] = useDeleteFriendship()
 
   return (
     <DownAnim>
@@ -13,11 +15,16 @@ export default function MyFriends() {
         {friendships.map((item, index) => (
           <RightAnim
             className="flex justify-between w-52 border border-black p-2"
-            key={item.whosFollowedBy.id}
+            key={item.id}
             delay={0.5 + index / 2}
           >
             {item.whosFollowedBy.username}
-            <XOctagon className="cursor-pointer" />
+            <XOctagon
+              onClick={async () => {
+                await handleDeleteFriendship(item.id)
+              }}
+              className="cursor-pointer"
+            />
           </RightAnim>
         ))}
       </div>
