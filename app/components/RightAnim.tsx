@@ -10,6 +10,7 @@ export default function RightAnim({
   children,
   delay = 0.5,
   className,
+  onClick,
 }: RightAnimInterface) {
   return (
     <motion.div
@@ -17,6 +18,7 @@ export default function RightAnim({
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay }}
       className={className}
+      onClick={onClick}
     >
       {children}
     </motion.div>
