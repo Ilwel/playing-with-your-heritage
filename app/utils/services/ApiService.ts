@@ -6,47 +6,11 @@ import {
   type ApolloQueryResult,
   type FetchResult,
   type NormalizedCacheObject,
-  HttpLink,
-  split,
 } from '@apollo/client'
-
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
-import { getMainDefinition } from '@apollo/client/utilities'
-import { createClient } from 'graphql-ws'
-
-const httpLink = new HttpLink({
-  // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
-  uri: process.env.API as string,
-})
-
-const token = localStorage.getItem('token')
-
-const wsLink = new GraphQLWsLink(
-  createClient({
-    // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
-    url: process.env.WS as string,
-    connectionParams: {
-      authorization: token,
-    },
-  })
-)
-
-const splitLink = split(
-  ({ query }) => {
-    const definition = getMainDefinition(query)
-    return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
-    )
-  },
-  wsLink,
-  httpLink
-)
 
 export default class ApiService {
   uri = process.env.API
   private readonly _client = new ApolloClient({
-    link: splitLink,
     cache: new InMemoryCache(),
   })
 
