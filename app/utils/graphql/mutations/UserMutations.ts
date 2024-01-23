@@ -42,7 +42,23 @@ const CREATE_MY_GAME = gql`
   mutation CreateMyGame {
     createMyGame {
       id
+      status
+      players {
+        money
+        playable
+        square
+        user {
+          username
+          id
+        }
+      }
     }
+  }
+`
+
+const CHANGE_GAME_STATE = gql`
+  mutation ChangeGameState($game: GameInput!) {
+    changeGameState(game: $game)
   }
 `
 
@@ -52,4 +68,5 @@ export {
   CREATE_FRIENDSHIP,
   DELETE_FRIENDSHIP,
   CREATE_MY_GAME,
+  CHANGE_GAME_STATE,
 }

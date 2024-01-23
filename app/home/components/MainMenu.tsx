@@ -24,7 +24,7 @@ export default function MainMenu() {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (data) {
-      console.log(data)
+      localStorage.setItem('game', JSON.stringify(data.createMyGame))
       router.push(`/lobby/${data?.createMyGame.id}`)
     }
   }, [data, router])
