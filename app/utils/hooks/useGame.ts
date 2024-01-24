@@ -1,7 +1,9 @@
-import { useMutation } from '@apollo/client'
-import { useEffect, useState } from 'react'
+/* eslint-disable @typescript-eslint/non-nullable-type-assertion-style */
+import { useMutation, useSubscription } from '@apollo/client'
+import { type SetStateAction, useEffect, useState, type Dispatch } from 'react'
 import { useSession } from './useSession'
 import { CHANGE_GAME_STATE } from '../graphql/mutations/UserMutations'
+import { CONNECT_ON_GAME } from '../graphql/subscriptions/GameSubscriptions'
 
 interface UserInterface {
   id: string
@@ -21,10 +23,18 @@ export interface GameInterface {
   status: string
 }
 
-export function useGame() {
+export function useGame(): [
+  GameInterface,
+  Dispatch<SetStateAction<GameInterface>>,
+] {
   const { id: userId, token } = useSession()
   const [game, setGame] = useState<GameInterface>()
   const [changeGameState] = useMutation(CHANGE_GAME_STATE)
+  const { data } = useSubscription(CONNECT_ON_GAME, {
+    variables: {
+      connectOnGameId: game?.id,
+    },
+  })
 
   useEffect(() => {
     const stringGame = localStorage.getItem('game')
@@ -34,6 +44,10 @@ export function useGame() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    console.log(data)
+  }, [data])
 
   useEffect(() => {
     return () => {
@@ -61,5 +75,8 @@ export function useGame() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game])
 
-  return [game, setGame]
+  return [
+    game as GameInterface,
+    setGame as Dispatch<SetStateAction<GameInterface>>,
+  ]
 }
