@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/non-nullable-type-assertion-style */
-import { useMutation } from '@apollo/client'
+import { useMutation, useSubscription } from '@apollo/client'
 import { type SetStateAction, useEffect, useState, type Dispatch } from 'react'
 import { useSession } from './useSession'
 import { CHANGE_GAME_STATE } from '../graphql/mutations/UserMutations'
+import { useRouter } from 'next/navigation'
+import { CONNECT_ON_GAME } from '../graphql/subscriptions/GameSubscriptions'
 
 interface UserInterface {
   id: string
@@ -23,13 +25,25 @@ export interface GameInterface {
   status: string
 }
 
-export function useGame(): [
-  GameInterface,
-  Dispatch<SetStateAction<GameInterface>>,
-] {
+type HandleOut = () => void
+
+export function useGame(): {
+  handleOut: HandleOut
+  game: [GameInterface, Dispatch<SetStateAction<GameInterface>>]
+} {
   const { id: userId, token } = useSession()
   const [game, setGame] = useState<GameInterface>()
   const [changeGameState] = useMutation(CHANGE_GAME_STATE)
+  const {
+    data: attGame,
+    loading,
+    error,
+  } = useSubscription(CONNECT_ON_GAME, {
+    variables: {
+      connectOnGameId: game?.id,
+    },
+  })
+  const router = useRouter()
 
   useEffect(() => {
     const stringGame = localStorage.getItem('game')
@@ -41,37 +55,47 @@ export function useGame(): [
   }, [])
 
   useEffect(() => {
-    return () => {
-      console.log('merda ao entrar')
-      if (game?.players != null) {
-        const players = game?.players
-        const mapPlayers = players
-          ?.filter((item) => item.user.id !== userId)
-          // eslint-disable-next-line @typescript-eslint/naming-convention
-          .map(({ user, __typename, ...rest }) => rest)
-        void (async () => {
-          await changeGameState({
-            variables: {
-              game: {
-                id: game.id,
-                status: game.status,
-                players: mapPlayers,
-              },
-            },
-            context: {
-              headers: {
-                authorization: token,
-              },
-            },
-          })
-        })()
-      }
+    console.log(error)
+    console.log(loading)
+    console.log(attGame)
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (attGame) {
+      setGame(attGame.connectOnGame as GameInterface)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [game])
+  }, [attGame, loading, error])
 
-  return [
-    game as GameInterface,
-    setGame as Dispatch<SetStateAction<GameInterface>>,
-  ]
+  const handleOut = () => {
+    if (game?.players != null) {
+      const players = game?.players
+      const mapPlayers = players
+        ?.filter((item) => item.user.id !== userId)
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        .map(({ user, __typename, ...rest }) => rest)
+      void (async () => {
+        await changeGameState({
+          variables: {
+            game: {
+              id: game.id,
+              status: game.status,
+              players: mapPlayers,
+            },
+          },
+          context: {
+            headers: {
+              authorization: token,
+            },
+          },
+        })
+      })()
+    }
+    router.push('/home')
+  }
+
+  return {
+    handleOut,
+    game: [
+      game as GameInterface,
+      setGame as Dispatch<SetStateAction<GameInterface>>,
+    ],
+  }
 }
