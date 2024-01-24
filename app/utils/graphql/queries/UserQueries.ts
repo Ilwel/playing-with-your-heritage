@@ -24,5 +24,22 @@ const MY_FIRENDS = gql`
     }
   }
 `
+const QUERY_MY_FRIENDS = gql`
+  query QueryFriendGames {
+    queryFriendGames {
+      id
+      players {
+        square
+        playable
+        money
+        user {
+          username
+          id
+        }
+      }
+      status
+    }
+  }
+`
 
-export { LIST_USERS, MY_FIRENDS }
+export { LIST_USERS, MY_FIRENDS, QUERY_MY_FRIENDS }

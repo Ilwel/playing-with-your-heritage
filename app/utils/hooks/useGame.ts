@@ -15,7 +15,7 @@ interface PlayerInterface {
   user: UserInterface
 }
 
-interface GameInterface {
+export interface GameInterface {
   id: string
   players: PlayerInterface[]
   status: string
