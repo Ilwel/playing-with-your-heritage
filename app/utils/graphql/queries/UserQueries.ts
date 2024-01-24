@@ -42,4 +42,22 @@ const QUERY_MY_FRIENDS = gql`
   }
 `
 
-export { LIST_USERS, MY_FIRENDS, QUERY_MY_FRIENDS }
+const GET_GAME = gql`
+  query GetGame($getGameId: String!) {
+    getGame(id: $getGameId) {
+      id
+      status
+      players {
+        money
+        playable
+        square
+        user {
+          username
+          id
+        }
+      }
+    }
+  }
+`
+
+export { LIST_USERS, MY_FIRENDS, QUERY_MY_FRIENDS, GET_GAME }

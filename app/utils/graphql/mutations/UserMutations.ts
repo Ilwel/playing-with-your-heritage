@@ -62,6 +62,24 @@ const CHANGE_GAME_STATE = gql`
   }
 `
 
+const REGISTER_ON_GAME = gql`
+  mutation RegisterOnGame($registerOnGameId: String!) {
+    registerOnGame(id: $registerOnGameId) {
+      id
+      players {
+        money
+        playable
+        square
+        user {
+          id
+          username
+        }
+      }
+      status
+    }
+  }
+`
+
 export {
   SIGN_UP,
   SIGN_IN,
@@ -69,4 +87,5 @@ export {
   DELETE_FRIENDSHIP,
   CREATE_MY_GAME,
   CHANGE_GAME_STATE,
+  REGISTER_ON_GAME,
 }

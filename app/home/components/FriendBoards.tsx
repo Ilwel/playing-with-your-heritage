@@ -28,7 +28,7 @@ export default function FriendBoards() {
     <div className="flex flex-col items-center">
       <h1>Friend Boards</h1>
       {!loading ? (
-        <ListFriendGames games={data.getFriendsGames} />
+        <ListFriendGames games={data?.getFriendsGames} />
       ) : firstLoading ? (
         <MiniLoading />
       ) : (

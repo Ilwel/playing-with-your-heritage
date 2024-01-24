@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/non-nullable-type-assertion-style */
-import { useMutation, useSubscription } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { type SetStateAction, useEffect, useState, type Dispatch } from 'react'
 import { useSession } from './useSession'
 import { CHANGE_GAME_STATE } from '../graphql/mutations/UserMutations'
-import { CONNECT_ON_GAME } from '../graphql/subscriptions/GameSubscriptions'
 
 interface UserInterface {
   id: string
@@ -15,6 +14,7 @@ interface PlayerInterface {
   playable: boolean
   square: string
   user: UserInterface
+  __typename?: string
 }
 
 export interface GameInterface {
@@ -30,11 +30,6 @@ export function useGame(): [
   const { id: userId, token } = useSession()
   const [game, setGame] = useState<GameInterface>()
   const [changeGameState] = useMutation(CHANGE_GAME_STATE)
-  const { data } = useSubscription(CONNECT_ON_GAME, {
-    variables: {
-      connectOnGameId: game?.id,
-    },
-  })
 
   useEffect(() => {
     const stringGame = localStorage.getItem('game')
@@ -46,21 +41,21 @@ export function useGame(): [
   }, [])
 
   useEffect(() => {
-    console.log(data)
-  }, [data])
-
-  useEffect(() => {
     return () => {
+      console.log('merda ao entrar')
       if (game?.players != null) {
-        let players = game?.players
-        players = players?.filter((item) => item.user.id !== userId)
+        const players = game?.players
+        const mapPlayers = players
+          ?.filter((item) => item.user.id !== userId)
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          .map(({ user, __typename, ...rest }) => rest)
         void (async () => {
           await changeGameState({
             variables: {
               game: {
                 id: game.id,
                 status: game.status,
-                players,
+                players: mapPlayers,
               },
             },
             context: {
