@@ -9,6 +9,7 @@ import { CONNECT_ON_GAME } from '../graphql/subscriptions/GameSubscriptions'
 interface UserInterface {
   id: string
   username: string
+  __typename: string
 }
 
 interface PlayerInterface {
@@ -55,9 +56,6 @@ export function useGame(): {
   }, [])
 
   useEffect(() => {
-    console.log(error)
-    console.log(loading)
-    console.log(attGame)
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (attGame) {
       setGame(attGame.connectOnGame as GameInterface)
@@ -70,7 +68,13 @@ export function useGame(): {
       const mapPlayers = players
         ?.filter((item) => item.user.id !== userId)
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        .map(({ user, __typename, ...rest }) => rest)
+        .map(({ __typename, ...rest }) => ({
+          ...rest,
+          user: {
+            id: rest.user.id,
+            username: rest.user.username,
+          },
+        }))
       void (async () => {
         await changeGameState({
           variables: {
