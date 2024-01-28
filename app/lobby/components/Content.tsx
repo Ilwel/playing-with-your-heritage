@@ -1,6 +1,6 @@
 'use client'
 import Button from '@/app/components/Button'
-// TODO: FIX THIS SHIT
+import DownAnim from '@/app/components/DownAnim'
 import RightAnim from '@/app/components/RightAnim'
 import { useGame } from '@/app/utils/hooks/useGame'
 import { XOctagon } from 'lucide-react'
@@ -8,6 +8,13 @@ import { XOctagon } from 'lucide-react'
 interface ContentInterface {
   id: string
 }
+
+const playerColors = [
+  'bg-red-400',
+  'bg-pink-400',
+  'bg-green-400',
+  'bg-slate-400',
+]
 
 export default function Content({ id }: ContentInterface) {
   const {
@@ -25,12 +32,21 @@ export default function Content({ id }: ContentInterface) {
         <XOctagon />
       </Button>
       <h2>Lobby {id}</h2>
-      <div className="mt-4 flex gap-1">
+      <div className="mt-4 flex gap-10">
         {game?.players.map((player, index) => (
-          <RightAnim className="" key={player.user.id}>
-            {player.user.username}
-            {index + 1 === game.players.length ? '' : ','}
-          </RightAnim>
+          <DownAnim
+            className="h-56 flex flex-col gap-1"
+            key={player.user.id}
+            delay={0.5 + index}
+          >
+            <div className={`w-52 h-52 ${playerColors[index]} `}></div>
+            <RightAnim
+              delay={1 + index}
+              className={`${playerColors[index]} p-2 text-white flex justify-center`}
+            >
+              {player.user.username}
+            </RightAnim>
+          </DownAnim>
         ))}
       </div>
     </div>

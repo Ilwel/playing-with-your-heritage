@@ -2,12 +2,12 @@ import RightAnim from '@/app/components/RightAnim'
 import { CREATE_MY_GAME } from '@/app/utils/graphql/mutations/UserMutations'
 import { useSession } from '@/app/utils/hooks/useSession'
 import { useMutation } from '@apollo/client'
-import { PlusSquare, Settings } from 'lucide-react'
+import { PlusSquare, Settings, SquareUserIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function MainMenu() {
-  const { token } = useSession()
+  const { token, username } = useSession()
   const [createMyGame, { data }] = useMutation(CREATE_MY_GAME)
   const router = useRouter()
 
@@ -33,6 +33,10 @@ export default function MainMenu() {
     <div>
       <h1>Main Menu</h1>
       <div className="mt-4 flex flex-col gap-4">
+        <RightAnim className="flex gap-2">
+          <SquareUserIcon />
+          <p className="font-bold">{username}</p>
+        </RightAnim>
         <RightAnim
           delay={1}
           className="button w-52 flex justify-between cursor-pointer"
