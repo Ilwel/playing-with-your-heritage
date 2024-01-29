@@ -2,7 +2,7 @@ import { useGLTF } from '@react-three/drei'
 import { motion } from 'framer-motion-3d'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function Bike({ color = '#fb7185', ...rest }: any) {
+export function Bike({ color = '#fb7185', ...rest }) {
   const { nodes, materials } = useGLTF('/models/bike/scene.gltf')
   return (
     <group {...rest} dispose={null}>

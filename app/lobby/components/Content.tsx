@@ -1,5 +1,5 @@
 'use client'
-import { Bike } from '@/app/components/3d/Bike'
+import { Bike } from '@/app/components/3d/Bike.jsx'
 import Expositor from '@/app/components/3d/Expositor'
 import Button from '@/app/components/Button'
 import DownAnim from '@/app/components/DownAnim'

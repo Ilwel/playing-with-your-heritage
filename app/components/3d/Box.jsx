@@ -3,9 +3,9 @@ import { motion } from 'framer-motion-3d'
 import { useRef } from 'react'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function Box({ color = '#fb7185', ...rest }: any) {
+export function Box({ color = '#fb7185', ...rest }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion
-  const meshRef = useRef<any>(null!)
+  const meshRef = useRef()
   // useFrame((_, delta) => (meshRef.current.rotation.x += delta))
   return (
     <AnimatePresence>
