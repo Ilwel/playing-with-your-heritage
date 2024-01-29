@@ -1,10 +1,11 @@
 'use client'
 import { GET_FRIEND_GAMES } from '@/app/utils/graphql/subscriptions/GameSubscriptions'
-import { useQuery, useSubscription } from '@apollo/client'
+import { useLazyQuery, useSubscription } from '@apollo/client'
 import ListFriendGames from './ListFriendGames'
 import { QUERY_MY_FRIENDS } from '@/app/utils/graphql/queries/UserQueries'
 import { useSession } from '@/app/utils/hooks/useSession'
 import MiniLoading from '@/app/components/MiniLoading'
+import { useEffect } from 'react'
 
 export default function FriendBoards() {
   const { token } = useSession()
@@ -12,17 +13,24 @@ export default function FriendBoards() {
     fetchPolicy: 'no-cache',
   })
 
-  const { data: firstData, loading: firstLoading } = useQuery(
-    QUERY_MY_FRIENDS,
-    {
-      context: {
-        headers: {
-          authorization: token,
-        },
-      },
-      fetchPolicy: 'no-cache',
-    }
-  )
+  const [queryMyFriends, { data: firstData, loading: firstLoading }] =
+    useLazyQuery(QUERY_MY_FRIENDS)
+
+  useEffect(() => {
+    void (async () => {
+      if (token != null && token?.length > 0) {
+        await queryMyFriends({
+          context: {
+            headers: {
+              authorization: token,
+            },
+          },
+          fetchPolicy: 'no-cache',
+        })
+      }
+    })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token])
 
   return (
     <div className="flex flex-col items-center">
