@@ -41,7 +41,7 @@ export default function Content({ id }: ContentInterface) {
           <DownAnim
             className="h-56 flex flex-col gap-1"
             key={player.user.id}
-            delay={0.5 + index}
+            delay={0.5}
           >
             <div className={`w-52 h-52 ${playerColors[index]} `}>
               <Expositor>
