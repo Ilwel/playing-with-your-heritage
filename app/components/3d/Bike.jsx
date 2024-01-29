@@ -6,21 +6,19 @@ export function Bike({ color = '#fb7185', ...rest }) {
   const { nodes, materials } = useGLTF('/models/bike/scene.gltf')
   return (
     <group {...rest} dispose={null}>
-      <motion.group
-        rotation={[-1.5, 0, 0]}
-        position={[0.5, -1, 0]}
-        scale={0.02}
-        animate={{
-          rotateZ: [0, 6.3],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      >
-        <group rotation={[Math.PI / 2, 0, 0]}>
-          <group position={[0, 100, 0]}>
+      <motion.group rotation={[-1.5, 0, 0]} position={[0.5, 1, 0]} scale={0.02}>
+        <motion.group
+          animate={{
+            rotateX: [Math.PI / 2, Math.PI / 4, Math.PI / 2],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <group position={[0, 0, 0]}>
             <group
               position={[-4.909, -57.779, -6.639]}
               rotation={[-Math.PI, 0, -Math.PI]}
@@ -35,9 +33,17 @@ export function Bike({ color = '#fb7185', ...rest }) {
                 material={materials.BlackRubber}
               />
             </group>
-            <group
+            <motion.group
               position={[0.335, -53.821, -76.473]}
-              rotation={[-Math.PI, 0, -Math.PI]}
+              // rotation={[-Math.PI, 0, -Math.PI]}
+              animate={{
+                rotateX: [0, 10],
+              }}
+              transition={{
+                duration: 1,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
             >
               <mesh
                 geometry={nodes.Wheel_back_Grey_Metal_0.geometry}
@@ -47,7 +53,7 @@ export function Bike({ color = '#fb7185', ...rest }) {
                 geometry={nodes.Wheel_back_BlackRubber_0.geometry}
                 material={materials.BlackRubber}
               />
-            </group>
+            </motion.group>
             <group
               position={[0.069, 31.872, 35.121]}
               rotation={[-Math.PI, 0, -Math.PI]}
@@ -65,7 +71,17 @@ export function Bike({ color = '#fb7185', ...rest }) {
                 <meshStandardMaterial color={color} />
               </mesh>
             </group>
-            <group position={[-0.335, -53.821, 75.895]}>
+            <motion.group
+              animate={{
+                rotateX: [0, 10],
+              }}
+              transition={{
+                duration: 1,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              position={[-0.335, -53.821, 75.895]}
+            >
               <mesh
                 geometry={nodes.Wheel_front_Grey_Metal_0.geometry}
                 material={materials.Grey_Metal}
@@ -74,7 +90,7 @@ export function Bike({ color = '#fb7185', ...rest }) {
                 geometry={nodes.Wheel_front_BlackRubber_0.geometry}
                 material={materials.BlackRubber}
               />
-            </group>
+            </motion.group>
             <mesh
               geometry={nodes.Frame_Red_Metal_0.geometry}
               material={materials.Red_Metal}
@@ -96,7 +112,7 @@ export function Bike({ color = '#fb7185', ...rest }) {
               material={materials.Grey_Metal}
             />
           </group>
-        </group>
+        </motion.group>
       </motion.group>
     </group>
   )
