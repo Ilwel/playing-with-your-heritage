@@ -35,10 +35,11 @@ export default function ListFriendGames({ games }: ListFriendGamesInterface) {
       localStorage.setItem('game', JSON.stringify(data.registerOnGame))
       router.push(`/lobby/${data.registerOnGame.id}`)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   return (
-    <div className="mt-4 w-52">
+    <div className="mt-4 w-52 flex flex-col gap-2">
       {games?.map((game) => (
         <RightAnim
           className="button w-52 flex justify-between cursor-pointer"

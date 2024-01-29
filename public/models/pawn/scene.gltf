@@ -1,0 +1,199 @@
+{
+  "accessors": [
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 368,
+      "max": [
+        0.9836177825927734,
+        2.8442940711975098,
+        0.9272069334983826
+      ],
+      "min": [
+        -0.9662379026412964,
+        0.003849506378173828,
+        -0.973762035369873
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 4416,
+      "componentType": 5126,
+      "count": 368,
+      "max": [
+        0.9822461605072021,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -0.9822461605072021,
+        -1.0,
+        -0.9341716170310974
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 552,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "nyu_grad_alley_2020 (https://sketchfab.com/nyu_grad_alley_2020)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/pawn-white-0836f229e089421d8202d1b549ce8ef9",
+      "title": "pawn white"
+    },
+    "generator": "Sketchfab-12.68.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 2208,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 8832,
+      "byteOffset": 2208,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 11040,
+      "uri": "scene.bin"
+    }
+  ],
+  "materials": [
+    {
+      "name": "White",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.882353,
+          0.882353,
+          0.882353,
+          1.0
+        ],
+        "metallicFactor": 0.25,
+        "roughnessFactor": 0.82
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Object_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0
+          },
+          "indices": 2,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "name": "root"
+    },
+    {
+      "children": [
+        3
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "GLTF_SceneRootNode"
+    },
+    {
+      "children": [
+        4
+      ],
+      "matrix": [
+        0.0,
+        0.0,
+        1.000000238418579,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -1.000000238418579,
+        0.0,
+        0.0,
+        0.0,
+        -6.380000114440918,
+        1.4600000381469727,
+        6.360000133514404,
+        1.0
+      ],
+      "name": "pawn white (1)_0"
+    },
+    {
+      "mesh": 0,
+      "name": "Object_4"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}

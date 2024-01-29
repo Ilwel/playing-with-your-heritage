@@ -1,5 +1,5 @@
 'use client'
-import { Box } from '@/app/components/3d/Box'
+import { Bike } from '@/app/components/3d/Bike'
 import Expositor from '@/app/components/3d/Expositor'
 import Button from '@/app/components/Button'
 import DownAnim from '@/app/components/DownAnim'
@@ -15,10 +15,10 @@ const playerColors = [
   'border border-red-400 text-red-400',
   'border border-indigo-400 text-indigo-400',
   'border border-teal-400 text-teal-400',
-  'border border-slate-400 text-slate-400',
+  'border border-orange-400 text-orange-400',
 ]
 
-const pieceColors = ['#fb7185', '#818cf8', '#2dd4bf', '#94a3b8']
+const pieceColors = ['#fb7185', '#818cf8', '#2dd4bf', '#fb923c']
 
 export default function Content({ id }: ContentInterface) {
   const {
@@ -45,12 +45,12 @@ export default function Content({ id }: ContentInterface) {
           >
             <div className={`w-52 h-52 ${playerColors[index]} `}>
               <Expositor>
-                <Box color={pieceColors[index]} />
+                <Bike color={pieceColors[index]} />
               </Expositor>
             </div>
             <RightAnim
               delay={1 + index}
-              className={`${playerColors[index]} p-2 flex justify-center`}
+              className={`${playerColors[index]} p-2 flex justify-center font-bold`}
             >
               {player.user.username}
             </RightAnim>

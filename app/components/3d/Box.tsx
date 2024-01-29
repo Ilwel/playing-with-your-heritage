@@ -3,7 +3,7 @@ import { motion } from 'framer-motion-3d'
 import { useRef } from 'react'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function Box({ color = '#ef4444', ...rest }: any) {
+export function Box({ color = '#fb7185', ...rest }: any) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion
   const meshRef = useRef<any>(null!)
   // useFrame((_, delta) => (meshRef.current.rotation.x += delta))

@@ -59,6 +59,7 @@ export function useGame(): {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (attGame) {
       setGame(attGame.connectOnGame as GameInterface)
+      localStorage.setItem('game', JSON.stringify(attGame.connectOnGame))
     }
   }, [attGame, loading, error])
 
