@@ -5,7 +5,6 @@ import ListFriendGames from './ListFriendGames'
 import { QUERY_MY_FRIENDS } from '@/app/utils/graphql/queries/UserQueries'
 import { useSession } from '@/app/utils/hooks/useSession'
 import MiniLoading from '@/app/components/MiniLoading'
-import { useEffect } from 'react'
 
 export default function FriendBoards() {
   const { token } = useSession()
@@ -13,34 +12,17 @@ export default function FriendBoards() {
     fetchPolicy: 'no-cache',
   })
 
-  const {
-    data: firstData,
-    loading: firstLoading,
-    refetch,
-  } = useQuery(QUERY_MY_FRIENDS, {
-    context: {
-      headers: {
-        authorization: token,
+  const { data: firstData, loading: firstLoading } = useQuery(
+    QUERY_MY_FRIENDS,
+    {
+      context: {
+        headers: {
+          authorization: token,
+        },
       },
-    },
-    fetchPolicy: 'no-cache',
-  })
-
-  useEffect(() => {
-    void (async () => {
-      if (token != null && token?.length > 0) {
-        await refetch({
-          context: {
-            headers: {
-              authorization: token,
-            },
-          },
-          fetchPolicy: 'no-cache',
-        })
-      }
-    })()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token])
+      fetchPolicy: 'no-cache',
+    }
+  )
 
   return (
     <div className="flex flex-col items-center">
