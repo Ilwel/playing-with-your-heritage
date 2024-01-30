@@ -1,6 +1,6 @@
 'use client'
 import { GET_FRIEND_GAMES } from '@/app/utils/graphql/subscriptions/GameSubscriptions'
-import { useLazyQuery, useSubscription } from '@apollo/client'
+import { useQuery, useSubscription } from '@apollo/client'
 import ListFriendGames from './ListFriendGames'
 import { QUERY_MY_FRIENDS } from '@/app/utils/graphql/queries/UserQueries'
 import { useSession } from '@/app/utils/hooks/useSession'
@@ -13,13 +13,23 @@ export default function FriendBoards() {
     fetchPolicy: 'no-cache',
   })
 
-  const [queryMyFriends, { data: firstData, loading: firstLoading }] =
-    useLazyQuery(QUERY_MY_FRIENDS)
+  const {
+    data: firstData,
+    loading: firstLoading,
+    refetch,
+  } = useQuery(QUERY_MY_FRIENDS, {
+    context: {
+      headers: {
+        authorization: token,
+      },
+    },
+    fetchPolicy: 'no-cache',
+  })
 
   useEffect(() => {
     void (async () => {
       if (token != null && token?.length > 0) {
-        await queryMyFriends({
+        await refetch({
           context: {
             headers: {
               authorization: token,
