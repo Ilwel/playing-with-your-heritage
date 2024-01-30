@@ -11,15 +11,20 @@ import { useRouter } from 'next/navigation'
 import { useSession } from '@/app/utils/hooks/useSession'
 import MainMenu from './MainMenu'
 import FriendBoards from './FriendBoards'
+import { useDispatch } from 'react-redux'
+import { type AppDispatch } from '@/app/utils/redux/store'
+import { resetAuth } from '@/app/utils/redux/features/authSlice'
 
 export default function Content() {
   const router = useRouter()
+  const dispatch = useDispatch<AppDispatch>()
   useSession()
 
   const handleSignOut = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('userId')
     localStorage.removeItem('username')
+    dispatch(resetAuth())
     router.push('/')
   }
 

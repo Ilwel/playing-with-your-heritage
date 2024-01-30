@@ -5,6 +5,7 @@ import ShakeCard from '@/app/components/ShakeCard'
 import { SIGN_IN } from '@/app/utils/graphql/mutations/UserMutations'
 import { useSession } from '@/app/utils/hooks/useSession'
 import { useTrigger } from '@/app/utils/hooks/useTrigger'
+import { setAuth } from '@/app/utils/redux/features/authSlice'
 import { setLoading } from '@/app/utils/redux/features/laodingSlice'
 import { type AppDispatch } from '@/app/utils/redux/store'
 import { SignInValidation } from '@/app/utils/validations/SignInValidation'
@@ -66,8 +67,16 @@ export default function Content() {
       localStorage.setItem('token', token as string)
       localStorage.setItem('userId', id as string)
       localStorage.setItem('username', username as string)
+      dispatch(
+        setAuth({
+          id: id ?? 'sign-in id set',
+          username: username ?? 'sign-in username set',
+          token: token ?? 'sign-in token set',
+        })
+      )
       router.push('/home')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, router])
 
   return (
