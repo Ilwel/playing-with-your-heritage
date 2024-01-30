@@ -2,10 +2,13 @@ import RightAnim from '@/app/components/RightAnim'
 import { REGISTER_ON_GAME } from '@/app/utils/graphql/mutations/UserMutations'
 import { type GameInterface } from '@/app/utils/hooks/useGame'
 import { useSession } from '@/app/utils/hooks/useSession'
+import { setLoading } from '@/app/utils/redux/features/laodingSlice'
+import { type AppDispatch } from '@/app/utils/redux/store'
 import { useMutation } from '@apollo/client'
 import { Gamepad } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 interface ListFriendGamesInterface {
   games: GameInterface[]
@@ -15,8 +18,10 @@ export default function ListFriendGames({ games }: ListFriendGamesInterface) {
   const { token } = useSession()
   const router = useRouter()
   const [registerOnGame, { data }] = useMutation(REGISTER_ON_GAME)
+  const dispatch = useDispatch<AppDispatch>()
 
   const handleClick = async (id: string) => {
+    dispatch(setLoading({ open: true }))
     await registerOnGame({
       variables: {
         registerOnGameId: id,
@@ -27,6 +32,7 @@ export default function ListFriendGames({ games }: ListFriendGamesInterface) {
         },
       },
     })
+    dispatch(setLoading({ open: false }))
   }
 
   useEffect(() => {

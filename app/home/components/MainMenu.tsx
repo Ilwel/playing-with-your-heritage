@@ -1,17 +1,22 @@
 import RightAnim from '@/app/components/RightAnim'
 import { CREATE_MY_GAME } from '@/app/utils/graphql/mutations/UserMutations'
 import { useSession } from '@/app/utils/hooks/useSession'
+import { setLoading } from '@/app/utils/redux/features/laodingSlice'
+import { type AppDispatch } from '@/app/utils/redux/store'
 import { useMutation } from '@apollo/client'
 import { PlusSquare, Settings, SquareUserIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 export default function MainMenu() {
   const { token, username } = useSession()
   const [createMyGame, { data }] = useMutation(CREATE_MY_GAME)
   const router = useRouter()
+  const dispatch = useDispatch<AppDispatch>()
 
   const handleStartBoard = async () => {
+    dispatch(setLoading({ open: true }))
     await createMyGame({
       context: {
         headers: {
@@ -19,6 +24,7 @@ export default function MainMenu() {
         },
       },
     })
+    dispatch(setLoading({ open: false }))
   }
 
   useEffect(() => {
