@@ -59,56 +59,43 @@ export function useGame(): {
 			localStorage.setItem('game', JSON.stringify(game))
 		}
 	}, [attGame, loading, error])
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (attGame) {
-      const { __typename, ...game } = attGame.connectOnGame as GameState
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      game.players = game.players.map(({ __typename, ...rest }) => ({
-        ...rest,
-        user: { id: rest.user.id, username: rest.user.username },
-      }))
-
-      dispatch(setGame(game))
-      localStorage.setItem('game', JSON.stringify(game))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [attGame, loading, error])
 
 	useEffect(() => {
-		void (async () => {
-			await changeGameState({
-			variables: {
-				game,
-			},
-			context: {
-				headers: {
-				authorization: session.token,
-				},
-			},
-			})
-		})()
+    if(game?.players != null ){
+      void (async () => {
+        await changeGameState({
+          variables: {
+            game,
+          },
+          context: {
+            headers: {
+              authorization: session.token,
+            },
+          },
+          })
+      })()
+    }
 	}, [game.turnPlayer])
 
 	const handleOut = () => {
-	if (game?.players != null) {
-		void (async () => {
-		await changeGameState({
-			variables: {
-			game : {
-				...game,
-				players: game.players.filter(({user: {id}}) => id !== session.id),
-			},
-			},
-			context: {
-			headers: {
-				authorization: session.token,
-			},
-			},
-		})
-		})()
-	}
-	router.push('/home')
+    if (game?.players != null) {
+      void (async () => {
+        await changeGameState({
+          variables: {
+            game : {
+              ...game,
+              players: game.players.filter(({user: {id}}) => id !== session.id),
+            },
+          },
+            context: {
+              headers: {
+                authorization: session.token,
+              },
+          },
+        })
+      })()
+    }
+    router.push('/home')
 	}
 
   return {
