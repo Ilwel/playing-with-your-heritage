@@ -1,4 +1,4 @@
-import { type PayloadAction, createSlice } from "@reduxjs/toolkit"
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 interface UserInterface {
   id: string
@@ -6,7 +6,7 @@ interface UserInterface {
   __typename?: string
 }
 
-interface PlayerInterface {
+export interface PlayerInterface {
   money: number
   playable: boolean
   square: string

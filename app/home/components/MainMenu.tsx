@@ -1,6 +1,11 @@
 import RightAnim from '@/app/components/RightAnim'
 import { CREATE_MY_GAME } from '@/app/utils/graphql/mutations/UserMutations'
 import { useSession } from '@/app/utils/hooks/useSession'
+import {
+  type GameState,
+  setGame,
+  type PlayerInterface,
+} from '@/app/utils/redux/features/gameSlice'
 import { setLoading } from '@/app/utils/redux/features/laodingSlice'
 import { type AppDispatch } from '@/app/utils/redux/store'
 import { useMutation } from '@apollo/client'
@@ -31,8 +36,17 @@ export default function MainMenu() {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (data) {
       localStorage.setItem('game', JSON.stringify(data.createMyGame))
+      data.players = data.players?.map(
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        ({ __typename, ...rest }: PlayerInterface) => ({
+          ...rest,
+          user: { id: rest.user.id, username: rest.user.username },
+        })
+      )
+      dispatch(setGame({ ...(data as GameState) }))
       router.push(`/lobby/${data?.createMyGame.id}`)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, router])
 
   return (

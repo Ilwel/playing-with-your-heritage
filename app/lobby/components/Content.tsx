@@ -21,10 +21,7 @@ const playerColors = [
 const pieceColors = ['#fb7185', '#818cf8', '#2dd4bf', '#fb923c']
 
 export default function Content({ id }: ContentInterface) {
-  const {
-    handleOut,
-    game,
-  } = useGame()
+  const { handleOut, game } = useGame()
 
   return (
     <div className="flex flex-col h-full items-center justify-center">
@@ -37,7 +34,7 @@ export default function Content({ id }: ContentInterface) {
       </Button>
       <h2>Lobby {id}</h2>
       <div className="mt-4 flex gap-10">
-        {game?.players.map((player, index) => (
+        {game?.players?.map((player, index) => (
           <DownAnim
             className="h-56 flex flex-col gap-1"
             key={player.user.id}
