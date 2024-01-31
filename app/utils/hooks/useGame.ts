@@ -1,39 +1,25 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/non-nullable-type-assertion-style */
 import { useMutation, useSubscription } from '@apollo/client'
-import { type SetStateAction, useEffect, useState, type Dispatch } from 'react'
+import { useEffect} from 'react'
 import { useSession } from './useSession'
 import { CHANGE_GAME_STATE } from '../graphql/mutations/UserMutations'
 import { useRouter } from 'next/navigation'
 import { CONNECT_ON_GAME } from '../graphql/subscriptions/GameSubscriptions'
+import { type AppDispatch, useAppSelector } from '../redux/store'
+import { useDispatch } from 'react-redux'
+import { type GameState, setGame } from '../redux/features/gameSlice'
 
-interface UserInterface {
-  id: string
-  username: string
-  __typename: string
-}
-
-interface PlayerInterface {
-  money: string
-  playable: boolean
-  square: string
-  user: UserInterface
-  __typename?: string
-}
-
-export interface GameInterface {
-  id: string
-  players: PlayerInterface[]
-  status: string
-}
 
 type HandleOut = () => void
 
 export function useGame(): {
   handleOut: HandleOut
-  game: [GameInterface, Dispatch<SetStateAction<GameInterface>>]
+  game: GameState
 } {
-  const { id: userId, token } = useSession()
-  const [game, setGame] = useState<GameInterface>()
+  const { id: userId , token } = useSession()
+  const game = useAppSelector((state) => state.gameReducer.value)
+  const dispatch = useDispatch<AppDispatch>()
   const [changeGameState] = useMutation(CHANGE_GAME_STATE)
   const {
     data: attGame,
@@ -49,8 +35,14 @@ export function useGame(): {
   useEffect(() => {
     const stringGame = localStorage.getItem('game')
     if (stringGame != null) {
-      const parseGame = JSON.parse(stringGame)
-      setGame(parseGame as GameInterface)
+      const parseGame = JSON.parse(stringGame) as GameState
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      parseGame.players = parseGame.players.map(({__typename, ...rest}) => ({...rest, user: {id: rest.user.id, username: rest.user.username}}))
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      const {__typename, ...game} = parseGame
+
+
+      dispatch(setGame(game)) 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -58,31 +50,49 @@ export function useGame(): {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (attGame) {
-      setGame(attGame.connectOnGame as GameInterface)
-      localStorage.setItem('game', JSON.stringify(attGame.connectOnGame))
+      const {__typename, ...game} = attGame.connectOnGame as GameState
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      game.players = game.players.map(({__typename, ...rest}) => ({...rest, user: {id: rest.user.id, username: rest.user.username}}))
+
+      dispatch(setGame(game))
+      localStorage.setItem('game', JSON.stringify(game))
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [attGame, loading, error])
+
+  useEffect(() => {
+    
+    void (async () => {
+      await changeGameState({
+        variables: {
+          game: {
+            id: game.id,
+            status: game.status,
+            players: game.players,
+            turnPlayer: game.turnPlayer,
+          },
+        },
+        context: {
+          headers: {
+            authorization: token,
+          },
+        },
+      })
+    })()
+    
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [game.turnPlayer])
 
   const handleOut = () => {
     if (game?.players != null) {
-      const players = game?.players
-      const mapPlayers = players
-        ?.filter((item) => item.user.id !== userId)
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        .map(({ __typename, ...rest }) => ({
-          ...rest,
-          user: {
-            id: rest.user.id,
-            username: rest.user.username,
-          },
-        }))
       void (async () => {
+        const filtered = game.players.filter((player) => player.user.id !== userId)
         await changeGameState({
           variables: {
-            game: {
-              id: game.id,
-              status: game.status,
-              players: mapPlayers,
+            game : {
+              ...game,
+              players: filtered,
             },
           },
           context: {
@@ -98,9 +108,6 @@ export function useGame(): {
 
   return {
     handleOut,
-    game: [
-      game as GameInterface,
-      setGame as Dispatch<SetStateAction<GameInterface>>,
-    ],
+    game,
   }
 }

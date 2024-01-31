@@ -23,7 +23,7 @@ const pieceColors = ['#fb7185', '#818cf8', '#2dd4bf', '#fb923c']
 export default function Content({ id }: ContentInterface) {
   const {
     handleOut,
-    game: [game],
+    game,
   } = useGame()
 
   return (

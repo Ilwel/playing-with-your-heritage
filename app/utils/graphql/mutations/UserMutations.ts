@@ -43,6 +43,7 @@ const CREATE_MY_GAME = gql`
     createMyGame {
       id
       status
+      turnPlayer
       players {
         money
         playable
@@ -66,6 +67,7 @@ const REGISTER_ON_GAME = gql`
   mutation RegisterOnGame($registerOnGameId: String!) {
     registerOnGame(id: $registerOnGameId) {
       id
+      turnPlayer
       players {
         money
         playable

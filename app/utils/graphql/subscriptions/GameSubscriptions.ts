@@ -19,6 +19,7 @@ const CONNECT_ON_GAME = gql`
   subscription ConnectOnGame($connectOnGameId: String!) {
     connectOnGame(id: $connectOnGameId) {
       id
+      turnPlayer
       players {
         playable
         money
