@@ -1,7 +1,7 @@
 import RightAnim from '@/app/components/RightAnim'
 import { REGISTER_ON_GAME } from '@/app/utils/graphql/mutations/UserMutations'
-import { type GameInterface } from '@/app/utils/hooks/useGame'
 import { useSession } from '@/app/utils/hooks/useSession'
+import { type GameState } from '@/app/utils/redux/features/gameSlice'
 import { setLoading } from '@/app/utils/redux/features/laodingSlice'
 import { type AppDispatch } from '@/app/utils/redux/store'
 import { useMutation } from '@apollo/client'
@@ -11,7 +11,7 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
 interface ListFriendGamesInterface {
-  games: GameInterface[]
+  games: GameState[]
 }
 
 export default function ListFriendGames({ games }: ListFriendGamesInterface) {
