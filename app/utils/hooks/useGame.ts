@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/non-nullable-type-assertion-style */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useMutation, useSubscription } from '@apollo/client'
 import { useEffect } from 'react'
 import { useSession } from './useSession'
@@ -13,41 +12,53 @@ import { type GameState, setGame } from '../redux/features/gameSlice'
 type HandleOut = () => void
 
 export function useGame(): {
-  handleOut: HandleOut
-  game: GameState
+
+	handleOut: HandleOut
+	game: GameState
+
 } {
-  const { id: userId, token } = useSession()
-  const game = useAppSelector((state) => state.gameReducer.value)
-  const dispatch = useDispatch<AppDispatch>()
-  const [changeGameState] = useMutation(CHANGE_GAME_STATE)
-  const {
-    data: attGame,
-    loading,
-    error,
-  } = useSubscription(CONNECT_ON_GAME, {
-    variables: {
-      connectOnGameId: game?.id,
-    },
-  })
-  const router = useRouter()
 
-  useEffect(() => {
-    const stringGame = localStorage.getItem('game')
-    if (stringGame != null) {
-      const parseGame = JSON.parse(stringGame) as GameState
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      parseGame.players = parseGame.players.map(({ __typename, ...rest }) => ({
-        ...rest,
-        user: { id: rest.user.id, username: rest.user.username },
-      }))
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      const { __typename, ...game } = parseGame
+	const session = useSession()
+	const router = useRouter()
+	const game = useAppSelector((state) => state.gameReducer.value)
+	const dispatch = useDispatch<AppDispatch>()
+	const [changeGameState] = useMutation(CHANGE_GAME_STATE)
+	const {
+	data: { connectOnGame: attGame },
+		loading,
+		error,
+	} = useSubscription(CONNECT_ON_GAME, {
+		variables: {
+			connectOnGameId: game?.id,
+		},
+	})
 
-      dispatch(setGame(game))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+	const cleanGame = ({ __typename: _, players, ...game } : GameState) => ({
+		players: (
+			players.map(({ __typename: _, user: { __typename: __, ...user }, ...player }) => ({
+				user,
+				...player
+			}))
+		),
+		...game
+	})
 
+	useEffect(() => {
+		const stringGame = localStorage.getItem('game')
+		if (stringGame != null) {
+			const parseGame = JSON.parse(stringGame) as GameState
+			const game = cleanGame(parseGame)
+			dispatch(setGame(game)) 
+		}
+	}, [])
+
+	useEffect(() => {
+		if (attGame != null) {
+			const game = cleanGame(attGame as GameState)
+			dispatch(setGame(game))
+			localStorage.setItem('game', JSON.stringify(game))
+		}
+	}, [attGame, loading, error])
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (attGame) {
@@ -64,54 +75,41 @@ export function useGame(): {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [attGame, loading, error])
 
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (game?.players) {
-      void (async () => {
-        await changeGameState({
-          variables: {
-            game: {
-              id: game.id,
-              status: game.status,
-              players: game.players,
-              turnPlayer: game.turnPlayer,
-            },
-          },
-          context: {
-            headers: {
-              authorization: token,
-            },
-          },
-        })
-      })()
-    }
+	useEffect(() => {
+		void (async () => {
+			await changeGameState({
+			variables: {
+				game,
+			},
+			context: {
+				headers: {
+				authorization: session.token,
+				},
+			},
+			})
+		})()
+	}, [game.turnPlayer])
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [game.turnPlayer])
-
-  const handleOut = () => {
-    if (game?.players != null) {
-      void (async () => {
-        const filtered = game.players.filter(
-          (player) => player.user.id !== userId
-        )
-        await changeGameState({
-          variables: {
-            game: {
-              ...game,
-              players: filtered,
-            },
-          },
-          context: {
-            headers: {
-              authorization: token,
-            },
-          },
-        })
-      })()
-    }
-    router.push('/home')
-  }
+	const handleOut = () => {
+	if (game?.players != null) {
+		void (async () => {
+		await changeGameState({
+			variables: {
+			game : {
+				...game,
+				players: game.players.filter(({user: {id}}) => id !== session.id),
+			},
+			},
+			context: {
+			headers: {
+				authorization: session.token,
+			},
+			},
+		})
+		})()
+	}
+	router.push('/home')
+	}
 
   return {
     handleOut,
