@@ -40,13 +40,13 @@ const handleRollDice = () => {
       {players.map((player, index) => (
         <div key={index} className="flex items-center space-x-2 mb-2">
           <div className="border-2 p-2 m-2 rounded-lg">
-            {player.user.username}
+            <span>{player.user.username}</span>
             {player.user.username === username && <span className="font-bold text-green-300">( you )</span>}
             {player.money}
           </div>
         </div>
       ))}
-      {(currentPlayer?.user.username === username || !rollingDice) && (
+      {(currentPlayer?.user.username === username && !rollingDice) && (
         <div className="absolute bottom-0 right-0 m-4">
           <Button
             disabled={rollingDice}
