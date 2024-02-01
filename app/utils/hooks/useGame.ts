@@ -11,6 +11,16 @@ import { type GameState, setGame } from '../redux/features/gameSlice'
 
 type HandleOut = () => void
 
+export const cleanGame = ({ __typename: _, players, ...game } : GameState) => ({
+  players: (
+    players.map(({ __typename: _, user: { __typename: __, ...user }, ...player }) => ({
+      user,
+      ...player
+    }))
+  ),
+  ...game
+})
+
 export function useGame(): {
 
 	handleOut: HandleOut
@@ -24,41 +34,33 @@ export function useGame(): {
 	const dispatch = useDispatch<AppDispatch>()
 	const [changeGameState] = useMutation(CHANGE_GAME_STATE)
 	const {
-	data: { connectOnGame: attGame },
-		loading,
-		error,
-	} = useSubscription(CONNECT_ON_GAME, {
-		variables: {
-			connectOnGameId: game?.id,
-		},
+      data,
+      loading,
+      error,
+    } = useSubscription(CONNECT_ON_GAME, {
+      variables: {
+        connectOnGameId: game?.id,
+      }
 	})
 
-	const cleanGame = ({ __typename: _, players, ...game } : GameState) => ({
-		players: (
-			players.map(({ __typename: _, user: { __typename: __, ...user }, ...player }) => ({
-				user,
-				...player
-			}))
-		),
-		...game
-	})
+	
 
 	useEffect(() => {
 		const stringGame = localStorage.getItem('game')
 		if (stringGame != null) {
 			const parseGame = JSON.parse(stringGame) as GameState
-			const game = cleanGame(parseGame)
-			dispatch(setGame(game)) 
+			const gameAtt = cleanGame(parseGame)
+			dispatch(setGame(gameAtt)) 
 		}
 	}, [])
 
 	useEffect(() => {
-		if (attGame != null) {
-			const game = cleanGame(attGame as GameState)
-			dispatch(setGame(game))
+		if (data != null) {
+			const gameAtt = cleanGame(data.connectOnGame as GameState)
+			dispatch(setGame(gameAtt))
 			localStorage.setItem('game', JSON.stringify(game))
 		}
-	}, [attGame, loading, error])
+	}, [data, loading, error])
 
 	useEffect(() => {
     if(game?.players != null ){
@@ -75,7 +77,7 @@ export function useGame(): {
           })
       })()
     }
-	}, [game.turnPlayer])
+	}, [game])
 
 	const handleOut = () => {
     if (game?.players != null) {
