@@ -34,32 +34,17 @@ export function useFriendsList() {
     },
   })
 
-  const following =
-    data?.friendships.filter((item) => item.whosFollowing.id === id) ?? []
-  const followedBy =
-    data?.friendships.filter((item) => item.whosFollowedBy.id === id) ?? []
-  const friendships =
-    following?.filter((item) =>
-      followedBy
-        ?.map((item) => item.whosFollowing.id)
-        .includes(item.whosFollowedBy.id)
-    ) ?? []
 
-  const sent =
-    following.filter(
-      (item) =>
-        !friendships
-          .map((item) => item.whosFollowedBy.id)
-          .includes(item.whosFollowedBy.id)
-    ) ?? []
 
-  const received =
-    followedBy.filter(
-      (item) =>
-        !friendships
-          .map((item) => item.whosFollowedBy.id)
-          .includes(item.whosFollowing.id)
-    ) ?? []
+  const following = data?.friendships.filter(item => item.whosFollowing.id === id) ?? []
+  const followedBy = data?.friendships.filter(item => item.whosFollowedBy.id === id) ?? []
+
+  const followedByIds = new Set(followedBy.map(item => item.whosFollowing.id))
+  const followingByIds = new Set(following.map(item => item.whosFollowedBy.id))
+
+  const friendships = following.filter(item => followedByIds.has(item.whosFollowedBy.id))
+  const sent = following.filter(item => !followedByIds.has(item.whosFollowedBy.id))
+  const received = followedBy.filter(item => !followingByIds.has(item.whosFollowing.id))
 
   return { friendships, following, followedBy, sent, received }
 }
