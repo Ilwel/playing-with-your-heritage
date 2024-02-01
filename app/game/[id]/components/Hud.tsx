@@ -46,7 +46,7 @@ const handleRollDice = () => {
           </div>
         </div>
       ))}
-      {currentPlayer?.user.username === username || !rollingDice && (
+      {(currentPlayer?.user.username === username || !rollingDice) && (
         <div className="absolute bottom-0 right-0 m-4">
           <Button
             disabled={rollingDice}
