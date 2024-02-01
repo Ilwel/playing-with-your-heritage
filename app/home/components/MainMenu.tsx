@@ -1,10 +1,10 @@
 import RightAnim from '@/app/components/RightAnim'
 import { CREATE_MY_GAME } from '@/app/utils/graphql/mutations/UserMutations'
+import { cleanGame } from '@/app/utils/hooks/useGame'
 import { useSession } from '@/app/utils/hooks/useSession'
 import {
   type GameState,
   setGame,
-  type PlayerInterface,
 } from '@/app/utils/redux/features/gameSlice'
 import { setLoading } from '@/app/utils/redux/features/laodingSlice'
 import { type AppDispatch } from '@/app/utils/redux/store'
@@ -16,7 +16,7 @@ import { useDispatch } from 'react-redux'
 
 export default function MainMenu() {
   const { token, username } = useSession()
-  const [createMyGame, { data }] = useMutation(CREATE_MY_GAME)
+  const [createMyGame, { data  }] = useMutation(CREATE_MY_GAME)
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
 
@@ -35,16 +35,10 @@ export default function MainMenu() {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (data) {
-      localStorage.setItem('game', JSON.stringify(data.createMyGame))
-      data.players = data.players?.map(
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        ({ __typename, ...rest }: PlayerInterface) => ({
-          ...rest,
-          user: { id: rest.user.id, username: rest.user.username },
-        })
-      )
-      dispatch(setGame({ ...(data as GameState) }))
-      router.push(`/lobby/${data?.createMyGame.id}`)
+      const game = cleanGame(data.createMyGame as GameState)
+      localStorage.setItem('game', JSON.stringify(game))
+      dispatch(setGame(game))
+      router.push(`/lobby/${game.id}`)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, router])
