@@ -57,8 +57,12 @@ export function useGame(): {
 	useEffect(() => {
 		if (data != null) {
 			const gameAtt = cleanGame(data.connectOnGame as GameState)
-			dispatch(setGame(gameAtt))
-			localStorage.setItem('game', JSON.stringify(game))
+
+      if(JSON.stringify(game) !== JSON.stringify(gameAtt)){
+        dispatch(setGame(gameAtt))
+	      localStorage.setItem('game', JSON.stringify(game))
+      }
+			
 		}
 	}, [data, loading, error])
 
