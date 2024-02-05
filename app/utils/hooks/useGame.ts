@@ -10,6 +10,8 @@ import { useDispatch } from 'react-redux'
 import { type GameState, setGame } from '../redux/features/gameSlice'
 
 type HandleOut = () => void
+type HandleStart = () => void
+
 
 export const cleanGame = ({ __typename: _, players, ...game } : GameState) => ({
   players: (
@@ -21,9 +23,13 @@ export const cleanGame = ({ __typename: _, players, ...game } : GameState) => ({
   ...game
 })
 
+
+
 export function useGame(): {
 
-	handleOut: HandleOut
+	handleOut: HandleOut,
+  handleStart: HandleStart,
+  handleUpdate: (game: GameState) => void,
 	game: GameState
 
 } {
@@ -33,56 +39,50 @@ export function useGame(): {
 	const game = useAppSelector((state) => state.gameReducer.value)
 	const dispatch = useDispatch<AppDispatch>()
 	const [changeGameState] = useMutation(CHANGE_GAME_STATE)
-	const {
-      data,
-      loading,
-      error,
-    } = useSubscription(CONNECT_ON_GAME, {
+	const { data, loading } = useSubscription(CONNECT_ON_GAME, {
       variables: {
         connectOnGameId: game?.id,
-      }
+      },
+      fetchPolicy: 'no-cache'
 	})
 
-	
+  useEffect(() => {
+    
+    if(!loading){
 
-	useEffect(() => {
-		const stringGame = localStorage.getItem('game')
-		if (stringGame != null) {
-			const parseGame = JSON.parse(stringGame) as GameState
-			const gameAtt = cleanGame(parseGame)
-			dispatch(setGame(gameAtt)) 
-		}
-	}, [])
+      const gameAtt = cleanGame(data.connectOnGame as GameState)
 
-	useEffect(() => {
-		if (data != null) {
-			const gameAtt = cleanGame(data.connectOnGame as GameState)
+      dispatch(setGame(gameAtt))
 
-      if(JSON.stringify(game) !== JSON.stringify(gameAtt)){
-        dispatch(setGame(gameAtt))
-	      localStorage.setItem('game', JSON.stringify(game))
-      }
-			
-		}
-	}, [data, loading, error])
-
-	useEffect(() => {
-    if(game?.players != null ){
-      void (async () => {
-        await changeGameState({
-          variables: {
-            game,
-          },
-          context: {
-            headers: {
-              authorization: session.token,
-            },
-          },
-          })
-      })()
     }
-	}, [game])
 
+  }, [data])
+
+  useEffect(() => {
+    switch (game?.status) {
+      case 'STARTED':
+        router.push(`/game/${game.id}`)
+        break
+      default:
+        break
+    }
+  
+  }, [game.status])
+
+  const handleUpdate = (gameAtt: GameState) => {
+    void changeGameState({
+      variables: {
+        game: gameAtt
+      },
+        context: {
+          headers: {
+            authorization: session.token,
+          },
+      },
+    })
+  }
+
+  
 	const handleOut = () => {
     if (game?.players != null) {
       void (async () => {
@@ -100,12 +100,26 @@ export function useGame(): {
           },
         })
       })()
+      router.push('/home')
     }
-    router.push('/home')
+    
 	}
+
+  const handleStart = () => {
+
+    if (game?.players != null) {
+      handleUpdate({
+        ...game,
+        status: 'STARTED',
+      })
+    }
+  }
+
 
   return {
     handleOut,
+    handleStart,
+    handleUpdate,
     game,
   }
 }

@@ -5,6 +5,7 @@ import Button from '@/app/components/Button'
 import DownAnim from '@/app/components/DownAnim'
 import RightAnim from '@/app/components/RightAnim'
 import { useGame } from '@/app/utils/hooks/useGame'
+import { useSession } from '@/app/utils/hooks/useSession'
 import { XOctagon } from 'lucide-react'
 
 interface ContentInterface {
@@ -21,10 +22,14 @@ const playerColors = [
 const pieceColors = ['#fb7185', '#818cf8', '#2dd4bf', '#fb923c']
 
 export default function Content({ id }: ContentInterface) {
-  const { handleOut, game } = useGame()
+  const { handleOut, handleStart, game } = useGame()
+  const { username } = useSession()
+  const admin = game?.players?.find((player) => player.role === 'ADMIN')
+  const isUserAdmin = admin?.user.username === username
 
   return (
     <div className="flex flex-col h-full items-center justify-center">
+      <div>gameStatus::{game?.status}</div>
       <Button
         className="w-52 flex justify-between absolute top-4 right-4"
         onClick={handleOut}
@@ -50,17 +55,19 @@ export default function Content({ id }: ContentInterface) {
               className={`${playerColors[index]} p-2 flex justify-center font-bold`}
             >
               {player.user.username}
+              ::
+              {player.role}
             </RightAnim>
           </DownAnim>
         ))}
       </div>
 
-      <Button
+      {isUserAdmin && (<Button
         className="w-52 flex justify-between absolute bottom-4 right-4"
-        href={`/game/${id}`}
+        onClick={handleStart}
       >
         Start Game
-      </Button>
+      </Button>)}
     </div>
   )
 }
