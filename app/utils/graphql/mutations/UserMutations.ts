@@ -48,6 +48,7 @@ const CREATE_MY_GAME = gql`
         money
         playable
         square
+        role
         user {
           username
           id
@@ -72,6 +73,7 @@ const REGISTER_ON_GAME = gql`
         money
         playable
         square
+        role
         user {
           id
           username

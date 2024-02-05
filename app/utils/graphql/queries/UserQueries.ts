@@ -32,6 +32,7 @@ const QUERY_MY_FRIENDS = gql`
         square
         playable
         money
+        role
         user {
           username
           id
@@ -51,6 +52,7 @@ const GET_GAME = gql`
         money
         playable
         square
+        role
         user {
           username
           id

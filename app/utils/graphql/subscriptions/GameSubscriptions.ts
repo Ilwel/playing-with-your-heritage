@@ -24,6 +24,7 @@ const CONNECT_ON_GAME = gql`
         playable
         money
         square
+        role
         user {
           id
           username

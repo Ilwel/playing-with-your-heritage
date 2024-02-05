@@ -11,6 +11,7 @@ export interface PlayerInterface {
   playable: boolean
   square: string
   user: UserInterface
+  role: 'ADMIN' | 'PLAYER' | 'SPECTATOR'
   __typename?: string
 }
 
@@ -30,7 +31,7 @@ const initialState: InitialState = {
   value: {
     id: '',
     players: [],
-    status: '',
+    status: 'CREATED',
     turnPlayer: 0,
   },
 }
