@@ -1,13 +1,13 @@
 import RightAnim from '@/app/components/RightAnim'
 import { REGISTER_ON_GAME } from '@/app/utils/graphql/mutations/UserMutations'
+import { cleanGame } from '@/app/utils/hooks/useGame'
 import { useSession } from '@/app/utils/hooks/useSession'
-import { type GameState } from '@/app/utils/redux/features/gameSlice'
+import { setGame, type GameState } from '@/app/utils/redux/features/gameSlice'
 import { setLoading } from '@/app/utils/redux/features/laodingSlice'
 import { type AppDispatch } from '@/app/utils/redux/store'
 import { useMutation } from '@apollo/client'
 import { Gamepad } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
 interface ListFriendGamesInterface {
@@ -17,7 +17,8 @@ interface ListFriendGamesInterface {
 export default function ListFriendGames({ games }: ListFriendGamesInterface) {
   const { token } = useSession()
   const router = useRouter()
-  const [registerOnGame, { data }] = useMutation(REGISTER_ON_GAME)
+
+  const [registerOnGame] = useMutation(REGISTER_ON_GAME)
   const dispatch = useDispatch<AppDispatch>()
 
   const handleClick = async (id: string) => {
@@ -31,18 +32,15 @@ export default function ListFriendGames({ games }: ListFriendGamesInterface) {
           authorization: token,
         },
       },
+    }).then(({data}) => {
+
+      const registeredGame = cleanGame(data.registerOnGame as GameState)
+      dispatch(setGame(registeredGame))
+      router.push(`/lobby/${registeredGame.id}`)
+    
     })
     dispatch(setLoading({ open: false }))
   }
-
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (data) {
-      localStorage.setItem('game', JSON.stringify(data.registerOnGame))
-      router.push(`/lobby/${data.registerOnGame.id}`)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
 
   return (
     <div className="mt-4 w-52 flex flex-col gap-2">
