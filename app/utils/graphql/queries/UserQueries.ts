@@ -48,6 +48,12 @@ const GET_GAME = gql`
     getGame(id: $getGameId) {
       id
       status
+      turnPlayer
+      chat {
+        createdAt
+        msg
+        username
+      }
       players {
         money
         playable

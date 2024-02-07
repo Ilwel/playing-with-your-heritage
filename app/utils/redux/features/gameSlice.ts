@@ -19,6 +19,7 @@ export interface ChatMessageInterface {
   msg: string
   username: string
   createdAt: string
+  __typename?: string
 }
 
 export interface GameState {

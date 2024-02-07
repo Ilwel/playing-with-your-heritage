@@ -62,12 +62,14 @@ export default function Content({ id }: ContentInterface) {
         ))}
       </div>
 
-      {isUserAdmin && (<Button
-        className="w-52 flex justify-between absolute bottom-4 right-4"
-        onClick={handleStart}
-      >
-        Start Game
-      </Button>)}
+      {isUserAdmin && (
+        <Button
+          className="w-52 flex justify-between absolute bottom-4 right-4"
+          onClick={handleStart}
+        >
+          Start Game
+        </Button>
+      )}
     </div>
   )
 }

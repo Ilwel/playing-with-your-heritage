@@ -44,6 +44,11 @@ const CREATE_MY_GAME = gql`
       id
       status
       turnPlayer
+      chat {
+        createdAt
+        msg
+        username
+      }
       players {
         money
         playable
@@ -68,7 +73,13 @@ const REGISTER_ON_GAME = gql`
   mutation RegisterOnGame($registerOnGameId: String!) {
     registerOnGame(id: $registerOnGameId) {
       id
+      status
       turnPlayer
+      chat {
+        createdAt
+        msg
+        username
+      }
       players {
         money
         playable
@@ -79,7 +90,6 @@ const REGISTER_ON_GAME = gql`
           username
         }
       }
-      status
     }
   }
 `

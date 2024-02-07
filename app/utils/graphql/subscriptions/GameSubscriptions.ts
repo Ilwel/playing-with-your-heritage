@@ -19,7 +19,13 @@ const CONNECT_ON_GAME = gql`
   subscription ConnectOnGame($connectOnGameId: String!) {
     connectOnGame(id: $connectOnGameId) {
       id
+      status
       turnPlayer
+      chat {
+        createdAt
+        msg
+        username
+      }
       players {
         playable
         money
@@ -30,7 +36,6 @@ const CONNECT_ON_GAME = gql`
           username
         }
       }
-      status
     }
   }
 `

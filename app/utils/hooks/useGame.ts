@@ -16,13 +16,21 @@ import {
 type Handle = () => void
 type HandleMsg = (msg: ChatMessageInterface) => void
 
-export const cleanGame = ({ __typename: _, players, ...game }: GameState) => ({
+export const cleanGame = ({
+  __typename: _,
+  players,
+  chat,
+  ...game
+}: GameState) => ({
   players: players.map(
     ({ __typename: _, user: { __typename: __, ...user }, ...player }) => ({
       user,
       ...player,
     })
   ),
+  chat: chat.map(({ __typename: _, ...chat }) => ({
+    ...chat,
+  })),
   ...game,
 })
 
@@ -53,12 +61,6 @@ export function useGame(): {
     }
   }, [data])
 
-  const handleChat = (msg: ChatMessageInterface) => {
-    const aux = game.chat
-    aux.push(msg)
-    handleUpdate({ ...game, chat: aux })
-  }
-
   useEffect(() => {
     switch (game?.status) {
       case 'STARTED':
@@ -68,6 +70,12 @@ export function useGame(): {
         break
     }
   }, [game.status])
+
+  const handleChat = (msg: ChatMessageInterface) => {
+    const aux = [...game.chat]
+    aux.push(msg)
+    handleUpdate({ ...game, chat: aux })
+  }
 
   const handleUpdate = (gameAtt: GameState) => {
     void changeGameState({
@@ -106,6 +114,7 @@ export function useGame(): {
   }
 
   const handleStart = () => {
+    console.log(game)
     if (game?.players != null) {
       handleUpdate({
         ...game,
