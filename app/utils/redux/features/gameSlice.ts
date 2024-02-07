@@ -15,11 +15,19 @@ export interface PlayerInterface {
   __typename?: string
 }
 
+export interface ChatMessageInterface {
+  msg: string
+  username: string
+  createdAt: string
+  __typename?: string
+}
+
 export interface GameState {
   id: string
   players: PlayerInterface[]
   status: string
   turnPlayer: number
+  chat: ChatMessageInterface[]
   __typename?: string
 }
 
@@ -33,6 +41,7 @@ const initialState: InitialState = {
     players: [],
     status: 'CREATED',
     turnPlayer: 0,
+    chat: [],
   },
 }
 

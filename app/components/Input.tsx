@@ -33,7 +33,7 @@ export default function Input(props: InputInterface) {
       variants={varContainer}
       initial="init"
       animate={onFocusTrigger ? 'focus' : 'init'}
-      className="flex flex-col relative mt-4"
+      className={'flex flex-col relative mt-4 ' + props.className}
       onClick={() => {
         setOnFocusTrigger(true)
       }}

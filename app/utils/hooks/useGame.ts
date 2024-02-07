@@ -7,55 +7,58 @@ import { useRouter } from 'next/navigation'
 import { CONNECT_ON_GAME } from '../graphql/subscriptions/GameSubscriptions'
 import { type AppDispatch, useAppSelector } from '../redux/store'
 import { useDispatch } from 'react-redux'
-import { type GameState, setGame } from '../redux/features/gameSlice'
+import {
+  type GameState,
+  setGame,
+  type ChatMessageInterface,
+} from '../redux/features/gameSlice'
 
-type HandleOut = () => void
-type HandleStart = () => void
+type Handle = () => void
+type HandleMsg = (msg: ChatMessageInterface) => void
 
-
-export const cleanGame = ({ __typename: _, players, ...game } : GameState) => ({
-  players: (
-    players.map(({ __typename: _, user: { __typename: __, ...user }, ...player }) => ({
-      user,
-      ...player
-    }))
-  ),
+export const cleanGame = ({
+  __typename: _,
+  players,
+  chat,
   ...game
+}: GameState) => ({
+  players: players.map(
+    ({ __typename: _, user: { __typename: __, ...user }, ...player }) => ({
+      user,
+      ...player,
+    })
+  ),
+  chat: chat.map(({ __typename: _, ...chat }) => ({
+    ...chat,
+  })),
+  ...game,
 })
 
-
-
 export function useGame(): {
-
-	handleOut: HandleOut,
-  handleStart: HandleStart,
-  handleUpdate: (game: GameState) => void,
-	game: GameState
-
+  handleOut: Handle
+  handleStart: Handle
+  handleChat: HandleMsg
+  handleUpdate: (game: GameState) => void
+  game: GameState
 } {
-
-	const session = useSession()
-	const router = useRouter()
-	const game = useAppSelector((state) => state.gameReducer.value)
-	const dispatch = useDispatch<AppDispatch>()
-	const [changeGameState] = useMutation(CHANGE_GAME_STATE)
-	const { data, loading } = useSubscription(CONNECT_ON_GAME, {
-      variables: {
-        connectOnGameId: game?.id,
-      },
-      fetchPolicy: 'no-cache'
-	})
+  const session = useSession()
+  const router = useRouter()
+  const game = useAppSelector((state) => state.gameReducer.value)
+  const dispatch = useDispatch<AppDispatch>()
+  const [changeGameState] = useMutation(CHANGE_GAME_STATE)
+  const { data, loading } = useSubscription(CONNECT_ON_GAME, {
+    variables: {
+      connectOnGameId: game?.id,
+    },
+    fetchPolicy: 'no-cache',
+  })
 
   useEffect(() => {
-    
-    if(!loading){
-
+    if (!loading) {
       const gameAtt = cleanGame(data.connectOnGame as GameState)
 
       dispatch(setGame(gameAtt))
-
     }
-
   }, [data])
 
   useEffect(() => {
@@ -66,47 +69,52 @@ export function useGame(): {
       default:
         break
     }
-  
   }, [game.status])
+
+  const handleChat = (msg: ChatMessageInterface) => {
+    const aux = [...game.chat]
+    aux.push(msg)
+    handleUpdate({ ...game, chat: aux })
+  }
 
   const handleUpdate = (gameAtt: GameState) => {
     void changeGameState({
       variables: {
-        game: gameAtt
+        game: gameAtt,
       },
-        context: {
-          headers: {
-            authorization: session.token,
-          },
+      context: {
+        headers: {
+          authorization: session.token,
+        },
       },
     })
   }
 
-  
-	const handleOut = () => {
+  const handleOut = () => {
     if (game?.players != null) {
       void (async () => {
         await changeGameState({
           variables: {
-            game : {
+            game: {
               ...game,
-              players: game.players.filter(({user: {id}}) => id !== session.id),
+              players: game.players.filter(
+                ({ user: { id } }) => id !== session.id
+              ),
             },
           },
-            context: {
-              headers: {
-                authorization: session.token,
-              },
+          context: {
+            headers: {
+              authorization: session.token,
+            },
           },
         })
       })()
       router.push('/home')
     }
-    
-	}
+  }
 
   const handleStart = () => {
-
+    console.log(game)
     if (game?.players != null) {
       handleUpdate({
         ...game,
@@ -115,10 +123,10 @@ export function useGame(): {
     }
   }
 
-
   return {
     handleOut,
     handleStart,
+    handleChat,
     handleUpdate,
     game,
   }
