@@ -56,12 +56,6 @@ export function useGame(): {
   const handleChat = (msg: ChatMessageInterface) => {
     const aux = game.chat
     aux.push(msg)
-    dispatch(
-      setGame({
-        ...game,
-        chat: aux,
-      })
-    )
     handleUpdate({ ...game, chat: aux })
   }
 
