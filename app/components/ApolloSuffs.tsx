@@ -7,6 +7,8 @@ import {
   type NormalizedCacheObject,
   InMemoryCache,
   ApolloProvider,
+  ApolloLink,
+  from,
 } from '@apollo/client'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { createClient } from 'graphql-ws'
@@ -38,6 +40,18 @@ export default function ApolloStuffs({ children }: ApolloStuffsInterface) {
       })
     )
 
+    const authMiddleware = new ApolloLink((operation, forward) => {
+      operation.setContext(({ headers = {} }) => ({
+        headers: {
+          ...headers,
+          authorization: auth.token,
+        }
+      }));
+    
+      return forward(operation);
+    })
+
+
     const splitLink = split(
       ({ query }) => {
         const definition = getMainDefinition(query)
@@ -47,7 +61,7 @@ export default function ApolloStuffs({ children }: ApolloStuffsInterface) {
         )
       },
       wsLink,
-      httpLink
+      from([authMiddleware, httpLink])
     )
 
     const newClient = new ApolloClient({
