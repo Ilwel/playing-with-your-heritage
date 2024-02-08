@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useMutation, useSubscription } from '@apollo/client'
+import { useMutation, useQuery, useSubscription } from '@apollo/client'
 import { useEffect } from 'react'
 import { useSession } from './useSession'
 import { CHANGE_GAME_STATE } from '../graphql/mutations/UserMutations'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { CONNECT_ON_GAME } from '../graphql/subscriptions/GameSubscriptions'
 import { type AppDispatch, useAppSelector } from '../redux/store'
 import { useDispatch } from 'react-redux'
@@ -12,6 +12,7 @@ import {
   setGame,
   type ChatMessageInterface,
 } from '../redux/features/gameSlice'
+import { GET_GAME } from '../graphql/queries/UserQueries'
 
 type Handle = () => void
 type HandleMsg = (msg: ChatMessageInterface) => void
@@ -43,23 +44,27 @@ export function useGame(): {
 } {
   const session = useSession()
   const router = useRouter()
+  const pathname = usePathname()
   const game = useAppSelector((state) => state.gameReducer.value)
   const dispatch = useDispatch<AppDispatch>()
+  const attGame = (game: unknown) =>  dispatch(setGame(cleanGame(game as GameState)))
   const [changeGameState] = useMutation(CHANGE_GAME_STATE)
-  const { data, loading } = useSubscription(CONNECT_ON_GAME, {
+
+  useQuery(GET_GAME, {
+    variables:{
+      getGameId: pathname.split('/')[2]
+    },
+    fetchPolicy: 'no-cache',
+    onCompleted: (data) => attGame(data.getGame),
+  })
+
+  useSubscription(CONNECT_ON_GAME, {
     variables: {
       connectOnGameId: game?.id,
     },
     fetchPolicy: 'no-cache',
+    onData: ({ data : { data } }) => attGame(data.connectOnGame),
   })
-
-  useEffect(() => {
-    if (!loading) {
-      const gameAtt = cleanGame(data.connectOnGame as GameState)
-
-      dispatch(setGame(gameAtt))
-    }
-  }, [data])
 
   useEffect(() => {
     switch (game?.status) {
@@ -71,50 +76,31 @@ export function useGame(): {
     }
   }, [game.status])
 
+  const handleUpdate = (gameAtt: GameState) => {
+    void changeGameState({
+      variables: {
+        game: gameAtt,
+      }
+    })
+  }
+
   const handleChat = (msg: ChatMessageInterface) => {
     const aux = [...game.chat]
     aux.push(msg)
     handleUpdate({ ...game, chat: aux })
   }
 
-  const handleUpdate = (gameAtt: GameState) => {
-    void changeGameState({
-      variables: {
-        game: gameAtt,
-      },
-      context: {
-        headers: {
-          authorization: session.token,
-        },
-      },
-    })
-  }
-
   const handleOut = () => {
     if (game?.players != null) {
-      void (async () => {
-        await changeGameState({
-          variables: {
-            game: {
-              ...game,
-              players: game.players.filter(
-                ({ user: { id } }) => id !== session.id
-              ),
-            },
-          },
-          context: {
-            headers: {
-              authorization: session.token,
-            },
-          },
-        })
-      })()
+      handleUpdate({ 
+        ...game, 
+        players: game.players.filter(({ user: { id } }) => id !== session.id)
+      })
       router.push('/home')
     }
   }
 
   const handleStart = () => {
-    console.log(game)
     if (game?.players != null) {
       handleUpdate({
         ...game,
@@ -128,6 +114,6 @@ export function useGame(): {
     handleStart,
     handleChat,
     handleUpdate,
-    game,
+    game
   }
 }

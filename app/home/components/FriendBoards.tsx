@@ -3,37 +3,29 @@ import { GET_FRIEND_GAMES } from '@/app/utils/graphql/subscriptions/GameSubscrip
 import { useQuery, useSubscription } from '@apollo/client'
 import ListFriendGames from './ListFriendGames'
 import { QUERY_MY_FRIENDS } from '@/app/utils/graphql/queries/UserQueries'
-import { useSession } from '@/app/utils/hooks/useSession'
-import MiniLoading from '@/app/components/MiniLoading'
+import { type GameState } from '@/app/utils/redux/features/gameSlice'
+import { useState } from 'react'
 
 export default function FriendBoards() {
-  const { token } = useSession()
-  const { data, loading } = useSubscription(GET_FRIEND_GAMES, {
+  const [games, setGames] = useState<GameState[]>([])
+
+  useSubscription(GET_FRIEND_GAMES, {
     fetchPolicy: 'no-cache',
+    onData: ({ data: { data } }) => {setGames(data.getFriendsGames as GameState[])},
   })
 
-  const { data: firstData, loading: firstLoading } = useQuery(
+  useQuery(
     QUERY_MY_FRIENDS,
     {
-      context: {
-        headers: {
-          authorization: token,
-        },
-      },
       fetchPolicy: 'no-cache',
+      onCompleted: (data) => {setGames(data.queryFriendGames as GameState[])}
     }
   )
 
   return (
     <div className="flex flex-col items-center">
       <h1>Friend Boards</h1>
-      {!loading ? (
-        <ListFriendGames games={data?.getFriendsGames} />
-      ) : firstLoading ? (
-        <MiniLoading />
-      ) : (
-        <ListFriendGames games={firstData?.queryFriendGames} />
-      )}
+      <ListFriendGames games={games}/>
     </div>
   )
 }

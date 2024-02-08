@@ -14,29 +14,22 @@ import { useRouter } from 'next/navigation'
 import { useDispatch } from 'react-redux'
 
 export default function MainMenu() {
-  const { token, username } = useSession()
+  const { username } = useSession()
   const [createMyGame] = useMutation(CREATE_MY_GAME)
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
 
-  const handleStartBoard = async () => {
+  const handleStartBoard = () => {
     dispatch(setLoading({ open: true }))
-    await createMyGame({
-      context: {
-        headers: {
-          authorization: token,
-        },
-      },
-    }).then(({data}) => {
-
-      const newGame = cleanGame(data.createMyGame as GameState)
-      dispatch(setGame(newGame))
-      router.push(`/lobby/${newGame.id}`)
-    
+    void createMyGame({
+      onCompleted: (data) => {
+        const newGame = cleanGame(data.createMyGame as GameState)
+        dispatch(setGame(newGame))
+        router.push(`/lobby/${newGame.id}`)
+        dispatch(setLoading({ open: false }))
+      }
     })
-    dispatch(setLoading({ open: false }))
   }
-
 
   return (
     <div>

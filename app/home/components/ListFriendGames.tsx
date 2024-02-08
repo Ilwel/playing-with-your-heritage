@@ -1,7 +1,6 @@
 import RightAnim from '@/app/components/RightAnim'
 import { REGISTER_ON_GAME } from '@/app/utils/graphql/mutations/UserMutations'
 import { cleanGame } from '@/app/utils/hooks/useGame'
-import { useSession } from '@/app/utils/hooks/useSession'
 import { setGame, type GameState } from '@/app/utils/redux/features/gameSlice'
 import { setLoading } from '@/app/utils/redux/features/laodingSlice'
 import { type AppDispatch } from '@/app/utils/redux/store'
@@ -15,31 +14,24 @@ interface ListFriendGamesInterface {
 }
 
 export default function ListFriendGames({ games }: ListFriendGamesInterface) {
-  const { token } = useSession()
   const router = useRouter()
 
   const [registerOnGame] = useMutation(REGISTER_ON_GAME)
   const dispatch = useDispatch<AppDispatch>()
 
-  const handleClick = async (id: string) => {
+  const handleClick = (id: string) => {
     dispatch(setLoading({ open: true }))
-    await registerOnGame({
+    void registerOnGame({
       variables: {
         registerOnGameId: id,
       },
-      context: {
-        headers: {
-          authorization: token,
-        },
-      },
-    }).then(({data}) => {
-
-      const registeredGame = cleanGame(data.registerOnGame as GameState)
-      dispatch(setGame(registeredGame))
-      router.push(`/lobby/${registeredGame.id}`)
-    
+      onCompleted: (data) => {
+        const registeredGame = cleanGame(data.registerOnGame as GameState)
+        dispatch(setGame(registeredGame))
+        router.push(`/lobby/${registeredGame.id}`)
+        dispatch(setLoading({ open: false }))
+      }
     })
-    dispatch(setLoading({ open: false }))
   }
 
   return (
@@ -48,9 +40,7 @@ export default function ListFriendGames({ games }: ListFriendGamesInterface) {
         <RightAnim
           className="button w-52 flex justify-between cursor-pointer"
           key={game.id}
-          onClick={async () => {
-            await handleClick(game.id)
-          }}
+          onClick={() => { handleClick(game.id) }}
         >
           {game.players[0].user.username}
           <Gamepad />
