@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
-    API: 'https://heirs.onrender.com/graphql',
-    WS: 'wss://heirs.onrender.com/graphql',
+    API: 'http://localhost:3001/graphql',
+    WS: 'ws://localhost:3001/graphql',
   },
 }
 

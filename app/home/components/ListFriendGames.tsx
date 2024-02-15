@@ -30,7 +30,7 @@ export default function ListFriendGames({ games }: ListFriendGamesInterface) {
         dispatch(setGame(registeredGame))
         router.push(`/lobby/${registeredGame.id}`)
         dispatch(setLoading({ open: false }))
-      }
+      },
     })
   }
 
@@ -40,9 +40,14 @@ export default function ListFriendGames({ games }: ListFriendGamesInterface) {
         <RightAnim
           className="button w-52 flex justify-between cursor-pointer"
           key={game.id}
-          onClick={() => { handleClick(game.id) }}
+          onClick={() => {
+            handleClick(game.id)
+          }}
         >
-          {game.players[0].user.username}
+          {
+            game.players.find((player) => player.role === 'ADMIN')?.user
+              .username
+          }
           <Gamepad />
         </RightAnim>
       ))}

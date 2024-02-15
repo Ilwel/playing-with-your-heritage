@@ -6,6 +6,7 @@ const GET_FRIEND_GAMES = gql`
       id
       status
       players {
+        role
         user {
           username
           id
